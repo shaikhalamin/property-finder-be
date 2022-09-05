@@ -7,6 +7,8 @@ import { PropertyTypeModule } from './property-type/property-type.module';
 import { MailModule } from './common/mail/mail.module';
 import { CityModule } from './city/city.module';
 import { PropertyModule } from './property/property.module';
+import { UserModule } from './user/user.module';
+import { AgentModule } from './agent/agent.module';
 
 const driverType = 'mysql'; //'mysql';
 const dbUrl = process.env.DB_URL; // 'mysql://root:12345678@localhost:3378/nest_ejobs';
@@ -28,6 +30,8 @@ const dbUrl = process.env.DB_URL; // 'mysql://root:12345678@localhost:3378/nest_
     MailModule,
     CityModule,
     PropertyModule,
+    UserModule,
+    AgentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

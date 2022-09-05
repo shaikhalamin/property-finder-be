@@ -18,7 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@/agent/*": ["src/agent/*"],
+      "@/city/*": ["src/city/*"],
       "@/common/*": ["src/common/*"],
+      "@/user/*": ["src/user/*"],
+      "@/property/*": ["src/property/*"],
+      "@/property-type/*": ["src/property-type/*"],
     }
   }
 }

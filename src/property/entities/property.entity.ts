@@ -1,6 +1,15 @@
+import { City } from '@/city/entities/city.entity';
 import { BaseEntity } from '@/common/entity/base.entity';
-import { City } from 'src/city/entities/city.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
+import { Feature } from './feature.entity';
+import { FloorPlan } from './floor-plan.entity';
 
 @Entity('properties')
 export class Property extends BaseEntity {
@@ -20,10 +29,10 @@ export class Property extends BaseEntity {
   price: number;
 
   @Column({ nullable: false, type: 'tinyint' })
-  bedroom: number;
+  noOfBedRoom: number;
 
   @Column({ nullable: false, type: 'tinyint' })
-  bathroom: number;
+  noOfBathRoom: number;
 
   @Column({ nullable: false, type: 'tinyint' })
   propertySize: number;
@@ -80,11 +89,11 @@ export class Property extends BaseEntity {
   @JoinColumn()
   city: City;
 
-  //   @Column({ nullable: true })
-  //   feature: Feature[];
+  @ManyToMany(() => Feature, (feature) => feature.properties)
+  features: Feature[];
 
-  //   @Column({ nullable: true })
-  //   floorPlan: FloorPlan[];
+  @OneToMany(() => FloorPlan, (floorPlan) => floorPlan.property)
+  floorPlans: FloorPlan[];
 
   //   @Column({ nullable: true })
   //   agent: Agent;
