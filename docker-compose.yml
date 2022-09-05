@@ -8,10 +8,8 @@ services:
       dockerfile: Dockerfile
     command: yarn start:dev
     container_name: property_me_be_container
-    user: root
     volumes:
       - ./:/usr/src/app
-      # - ./node_modules:/usr/src/app/node_modules
       - /usr/src/app/node_modules
     ports:
       - '8070:3000'
@@ -21,7 +19,7 @@ services:
       DB_URL: mysql://root:12345678@property_db_container:3306/property_me
       DB_DRIVER: mysql
 
-# mysql -h 0.0.0.0 -P 3390 -u root -p // to connect mysql from terminal
+# mysql -h 0.0.0.0 -P 3390 -u root -p'12345678' // to connect mysql from terminal
   property_db:
     # platform: linux/x86_64 // for mac m1 build
     image: mysql:5.7
@@ -33,5 +31,3 @@ services:
     ports:
       - '3390:3306'
   
-volumes:
-  node_modules:
