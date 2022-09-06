@@ -1,6 +1,7 @@
 import { BaseEntity } from '@/common/entity/base.entity';
+import { Property } from '@/property/entities/property.entity';
 import { User } from '@/user/entities/user.entity';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity('agents')
 export class Agent extends BaseEntity {
@@ -28,4 +29,7 @@ export class Agent extends BaseEntity {
   @OneToOne(() => User, (user) => user.agent)
   @JoinColumn()
   user: User;
+
+  @OneToMany(() => Property, (property) => property.agent)
+  properties: Property[];
 }

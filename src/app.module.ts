@@ -9,6 +9,7 @@ import { CityModule } from './city/city.module';
 import { PropertyModule } from './property/property.module';
 import { UserModule } from './user/user.module';
 import { AgentModule } from './agent/agent.module';
+import { DataSource } from 'typeorm';
 
 const driverType = 'mysql'; //'mysql';
 const dbUrl = process.env.DB_URL; // 'mysql://root:12345678@localhost:3378/nest_ejobs';
@@ -36,4 +37,6 @@ const dbUrl = process.env.DB_URL; // 'mysql://root:12345678@localhost:3378/nest_
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}

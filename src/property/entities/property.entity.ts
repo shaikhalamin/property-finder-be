@@ -1,5 +1,3 @@
-import { City } from '@/city/entities/city.entity';
-import { BaseEntity } from '@/common/entity/base.entity';
 import {
   Column,
   Entity,
@@ -10,6 +8,11 @@ import {
 } from 'typeorm';
 import { Feature } from './feature.entity';
 import { FloorPlan } from './floor-plan.entity';
+import { PropertyFeatureImage } from './property-feature-images.entity';
+import { Agent } from '@/agent/entities/agent.entity';
+import { City } from '@/city/entities/city.entity';
+import { BaseEntity } from '@/common/entity/base.entity';
+import { PropertyType } from '@/property-type/entities/property-type.entity';
 
 @Entity('properties')
 export class Property extends BaseEntity {
@@ -18,6 +21,9 @@ export class Property extends BaseEntity {
 
   @Column({ nullable: false })
   slug: string;
+
+  @Column({ nullable: false, type: 'varchar', length: 50 })
+  purpose: string;
 
   @Column({ nullable: false, type: 'text' })
   descriptions: string;
@@ -85,6 +91,10 @@ export class Property extends BaseEntity {
   @Column({ nullable: true, type: 'varchar' })
   videoTourLink: string;
 
+  @ManyToOne(() => PropertyType, (propertyType) => propertyType.properties)
+  @JoinColumn()
+  propertyType: PropertyType;
+
   @ManyToOne(() => City, (city) => city.properties)
   @JoinColumn()
   city: City;
@@ -95,17 +105,18 @@ export class Property extends BaseEntity {
   @OneToMany(() => FloorPlan, (floorPlan) => floorPlan.property)
   floorPlans: FloorPlan[];
 
-  //   @Column({ nullable: true })
-  //   agent: Agent;
+  @ManyToMany(() => Agent, (agent) => agent.properties)
+  @JoinColumn()
+  agent: Agent;
 
-  //   @Column({ nullable: true })
-  //   headerImages: HeaderImages[];
+  @Column({ nullable: true, type: 'varchar' })
+  headerImage: string;
 
-  //   @Column({ nullable: true })
-  //   featureImages: FeatureImages[];
-
-  @Column({ nullable: false, type: 'varchar', length: 50 })
-  purpose: string;
+  @OneToMany(
+    () => PropertyFeatureImage,
+    (propertyFeatureImage) => propertyFeatureImage.property,
+  )
+  propertyFeatureImages: PropertyFeatureImage[];
 
   @Column({ nullable: true, type: 'double' })
   deposit: number;
