@@ -8,7 +8,7 @@ export class PropertyType extends BaseEntity {
   name: string;
 
   @Column({ nullable: false })
-  slug: string;
+  alias: string;
 
   @OneToMany(() => Property, (property) => property.propertyType)
   properties: Property[];

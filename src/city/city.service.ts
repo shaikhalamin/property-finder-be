@@ -1,15 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
+import { City } from './entities/city.entity';
 
 @Injectable()
 export class CityService {
-  create(createCityDto: CreateCityDto) {
-    return 'This action adds a new city';
+  constructor(
+    @InjectRepository(City)
+    private readonly cityRepository: Repository<City>,
+  ) {}
+
+  async create(createCityDto: CreateCityDto) {
+    try {
+      const city = Object.assign(new City(), createCityDto) as City;
+      return await this.cityRepository.save(city);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all city`;
+  async findAll() {
+    try {
+      return await this.cityRepository.find({
+        select: ['id', 'name'],
+      });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   findOne(id: number) {

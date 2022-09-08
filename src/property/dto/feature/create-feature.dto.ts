@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreatePropertyTypeDto {
+export class CreateFeatureDto {
   @IsNotEmpty()
   name: string;
 

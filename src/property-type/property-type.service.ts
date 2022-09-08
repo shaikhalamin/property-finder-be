@@ -1,15 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreatePropertyTypeDto } from './dto/create-property-type.dto';
 import { UpdatePropertyTypeDto } from './dto/update-property-type.dto';
+import { PropertyType } from './entities/property-type.entity';
 
 @Injectable()
 export class PropertyTypeService {
-  create(createPropertyTypeDto: CreatePropertyTypeDto) {
-    return 'This action adds a new propertyType';
+  constructor(
+    @InjectRepository(PropertyType)
+    private readonly propertyTypeRepository: Repository<PropertyType>,
+  ) {}
+
+  async create(createPropertyTypeDto: CreatePropertyTypeDto) {
+    try {
+      const propertyType = Object.assign(
+        new PropertyType(),
+        createPropertyTypeDto,
+      ) as PropertyType;
+      return await this.propertyTypeRepository.save(propertyType);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all propertyType`;
+  async findAll() {
+    return await this.propertyTypeRepository.find({
+      relations: ['properties'],
+    });
   }
 
   findOne(id: number) {
