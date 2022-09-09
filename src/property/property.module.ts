@@ -6,6 +6,8 @@ import { Property } from './entities/property.entity';
 import { Feature } from './entities/feature.entity';
 import { FloorPlan } from './entities/floor-plan.entity';
 import { PropertyFeatureImage } from './entities/property-feature-images.entity';
+import { FeatureController } from './feature/feature.controller';
+import { FeatureService } from './feature/feature.service';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { PropertyFeatureImage } from './entities/property-feature-images.entity'
       PropertyFeatureImage,
     ]),
   ],
-  controllers: [PropertyController],
-  providers: [PropertyService],
+  controllers: [PropertyController, FeatureController],
+  providers: [PropertyService, FeatureService],
 })
 export class PropertyModule {}

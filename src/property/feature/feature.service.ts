@@ -1,15 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateFeatureDto } from '../dto/feature/create-feature.dto';
 import { UpdateFeatureDto } from '../dto/feature/update-feature.dto';
+import { Feature } from '../entities/feature.entity';
 
 @Injectable()
 export class FeatureService {
-  create(createFeatureDto: CreateFeatureDto) {
-    return 'This action adds a new property';
+  constructor(
+    @InjectRepository(Feature)
+    private readonly featureRepository: Repository<Feature>,
+  ) {}
+
+  async create(createFeatureDto: CreateFeatureDto) {
+    try {
+      const feature = Object.assign(new Feature(), createFeatureDto) as Feature;
+      return await this.featureRepository.save(feature);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all property`;
+  async findAll() {
+    return await this.featureRepository.find({
+      select: ['id', 'name'],
+    });
   }
 
   findOne(id: number) {
@@ -22,5 +37,28 @@ export class FeatureService {
 
   remove(id: number) {
     return `This action removes a #${id} property`;
+  }
+
+  async insertAll() {
+    const featureArray = [
+      { name: 'AC & Heating' },
+      { name: 'Balcony' },
+      { name: 'Clubhouse' },
+      { name: 'Dishwasher' },
+      { name: 'Elevator' },
+      { name: 'Fitness Center' },
+      { name: 'Granite Countertops' },
+      { name: 'Laundry Facilities' },
+      { name: 'Modern Kitchen' },
+      { name: 'Pet Friendly' },
+      { name: 'Pool' },
+      { name: 'Spa' },
+    ];
+
+    const featureCount = await this.featureRepository.count();
+    if (!featureCount) {
+      await this.featureRepository.insert(featureArray);
+    }
+    return await this.featureRepository.find({});
   }
 }

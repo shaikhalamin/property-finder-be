@@ -42,4 +42,29 @@ export class CityService {
   remove(id: number) {
     return `This action removes a #${id} city`;
   }
+
+  async insertAll() {
+    const cityArray = [
+      { name: 'Washington' },
+      { name: 'San Francisco' },
+      { name: 'San Diego' },
+      { name: 'New York' },
+      { name: 'Miami' },
+      { name: 'Boston' },
+      { name: 'Chicago' },
+      { name: 'Columbus' },
+      { name: 'Dallas' },
+      { name: 'Detroit' },
+      { name: 'Las Vegas' },
+      { name: 'Los Angeles' },
+    ];
+
+    const cityCount = await this.cityRepository.count({});
+
+    if (!cityCount) {
+      await this.cityRepository.insert(cityArray);
+    }
+
+    return await this.cityRepository.find({});
+  }
 }

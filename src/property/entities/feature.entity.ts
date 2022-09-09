@@ -7,7 +7,7 @@ export class Feature extends BaseEntity {
   @Column({ nullable: false })
   name: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   alias: string;
 
   @ManyToMany(() => Property)

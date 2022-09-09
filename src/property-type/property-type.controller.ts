@@ -42,4 +42,9 @@ export class PropertyTypeController {
   remove(@Param('id') id: string) {
     return this.propertyTypeService.remove(+id);
   }
+
+  @Get('/insert/all/types')
+  insertAll() {
+    return this.propertyTypeService.insertAll();
+  }
 }

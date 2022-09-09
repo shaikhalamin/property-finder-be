@@ -11,7 +11,7 @@ import { CreateFeatureDto } from '../dto/feature/create-feature.dto';
 import { UpdateFeatureDto } from '../dto/feature/update-feature.dto';
 import { FeatureService } from './feature.service';
 
-@Controller('property')
+@Controller('feature')
 export class FeatureController {
   constructor(private readonly featureService: FeatureService) {}
 
@@ -38,5 +38,10 @@ export class FeatureController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.featureService.remove(+id);
+  }
+
+  @Get('/insert/all/feature')
+  insertAll() {
+    return this.featureService.insertAll();
   }
 }

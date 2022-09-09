@@ -26,6 +26,7 @@ export class PropertyTypeService {
 
   async findAll() {
     return await this.propertyTypeRepository.find({
+      select: ['id', 'name'],
       relations: ['properties'],
     });
   }
@@ -40,5 +41,23 @@ export class PropertyTypeService {
 
   remove(id: number) {
     return `This action removes a #${id} propertyType`;
+  }
+
+  async insertAll() {
+    const propertyTypes = [
+      { name: 'Townhouses' },
+      { name: 'Houses' },
+      { name: 'Garages' },
+      { name: 'Duplex' },
+      { name: 'Apartments' },
+    ];
+
+    const propertyTypeCount = await this.propertyTypeRepository.count({});
+
+    if (!propertyTypeCount) {
+      await this.propertyTypeRepository.insert(propertyTypes);
+    }
+
+    return await this.propertyTypeRepository.find({});
   }
 }
