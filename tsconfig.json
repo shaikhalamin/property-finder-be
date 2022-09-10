@@ -24,6 +24,7 @@
       "@/user/*": ["src/user/*"],
       "@/property/*": ["src/property/*"],
       "@/property-type/*": ["src/property-type/*"],
+      "@/storage-file/*": ["src/storage-file/*"],
     }
   }
 }

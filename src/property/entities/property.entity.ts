@@ -8,11 +8,11 @@ import {
 } from 'typeorm';
 import { Feature } from './feature.entity';
 import { FloorPlan } from './floor-plan.entity';
-import { PropertyFeatureImage } from './property-feature-images.entity';
 import { Agent } from '@/agent/entities/agent.entity';
 import { City } from '@/city/entities/city.entity';
 import { BaseEntity } from '@/common/entity/base.entity';
 import { PropertyType } from '@/property-type/entities/property-type.entity';
+import { StorageFile } from '@/storage-file/entities/storage-file.entity';
 
 @Entity('properties')
 export class Property extends BaseEntity {
@@ -70,7 +70,7 @@ export class Property extends BaseEntity {
   @Column({ nullable: true, type: 'double' })
   garageSize: number;
 
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: true, type: 'varchar' })
   additionalSpec: string;
 
   @Column({ nullable: false, type: 'tinyint' })
@@ -112,11 +112,9 @@ export class Property extends BaseEntity {
   @Column({ nullable: true, type: 'varchar' })
   headerImage: string;
 
-  @OneToMany(
-    () => PropertyFeatureImage,
-    (propertyFeatureImage) => propertyFeatureImage.property,
-  )
-  propertyFeatureImages: PropertyFeatureImage[];
+  // by setting type [header and feature] we can get header and feature images of any property
+  @OneToMany(() => StorageFile, (storageFile) => storageFile.property)
+  propertyImages: StorageFile[];
 
   @Column({ nullable: true, type: 'double' })
   deposit: number;

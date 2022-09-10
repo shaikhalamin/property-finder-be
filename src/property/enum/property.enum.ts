@@ -51,3 +51,7 @@ export enum Habitability {
 //     return !!value;
 //     TaskStatus[status]
 //   }
+
+// for (let value in Values) {
+//   console.log(Values[value]);
+// }

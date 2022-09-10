@@ -19,7 +19,7 @@ services:
       DB_URL: mysql://root:12345678@property_db_container:3306/property_me
       DB_DRIVER: mysql
 
-# mysql -h 0.0.0.0 -P 3390 -u root -p'12345678' // to connect mysql from terminal
+# mysql -h 0.0.0.0 -P 3390 -u root -D property_me -p'12345678' // to connect mysql from terminal
   property_db:
     # platform: linux/x86_64 // for mac m1 build
     image: mysql:5.7

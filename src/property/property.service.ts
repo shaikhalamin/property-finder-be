@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePropertyDto } from './dto/create-feature.dto';
+import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 
 @Injectable()

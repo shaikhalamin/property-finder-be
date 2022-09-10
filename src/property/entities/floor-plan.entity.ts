@@ -1,11 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '@/common/entity/base.entity';
 import { Property } from './property.entity';
+import { StorageFile } from '@/storage-file/entities/storage-file.entity';
 
 @Entity('floor_plans')
 export class FloorPlan extends BaseEntity {
   @Column({ nullable: false })
   name: string;
+
+  @Column({ nullable: false, type: 'text' })
+  description: string;
 
   @Column({ nullable: false, type: 'tinyint' })
   noOfBathRoom: number;
@@ -19,4 +23,7 @@ export class FloorPlan extends BaseEntity {
   @ManyToOne(() => Property, (property) => property.floorPlans)
   @JoinColumn()
   property: Property;
+
+  @OneToMany(() => StorageFile, (storageFile) => storageFile.floorPlan)
+  floorPlanImages: StorageFile[];
 }
