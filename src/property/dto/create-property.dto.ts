@@ -1,11 +1,8 @@
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
-import { CreateFloorPlanDto } from './floor-plan/create-floor-plan.dto';
+import { CreateFloorPlanDto } from '../floor-plan/dto/create-floor-plan.dto';
 export class CreatePropertyDto {
   @IsNotEmpty()
   name: string;
-
-  @IsNotEmpty()
-  slug: string;
 
   @IsNotEmpty()
   purpose: string;
@@ -78,7 +75,11 @@ export class CreatePropertyDto {
   videoTourLink: string;
 
   @IsNotEmpty()
+  @IsNumber()
   propertyType: number;
+
+  @IsNotEmpty()
+  agent: number;
 
   @IsNotEmpty()
   city: number;
@@ -91,9 +92,6 @@ export class CreatePropertyDto {
   @IsOptional()
   @IsNotEmpty()
   floorPlans: CreateFloorPlanDto[];
-
-  @IsNotEmpty()
-  agent: number;
 
   @IsNotEmpty()
   propertyImages: number[];

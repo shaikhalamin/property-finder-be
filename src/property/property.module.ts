@@ -7,10 +7,13 @@ import { Feature } from './entities/feature.entity';
 import { FloorPlan } from './entities/floor-plan.entity';
 import { FeatureController } from './feature/feature.controller';
 import { FeatureService } from './feature/feature.service';
+//import { PropertyFeature } from './entities/property-feature.entity';
+import { FloorPlanController } from './floor-plan/floor-plan.controller';
+import { FloorPlanService } from './floor-plan/floor-plan.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Property, Feature, FloorPlan])],
-  controllers: [PropertyController, FeatureController],
-  providers: [PropertyService, FeatureService],
+  controllers: [PropertyController, FeatureController, FloorPlanController],
+  providers: [PropertyService, FeatureService, FloorPlanService],
 })
 export class PropertyModule {}

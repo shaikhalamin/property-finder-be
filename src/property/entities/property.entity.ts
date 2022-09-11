@@ -13,6 +13,7 @@ import { City } from '@/city/entities/city.entity';
 import { BaseEntity } from '@/common/entity/base.entity';
 import { PropertyType } from '@/property-type/entities/property-type.entity';
 import { StorageFile } from '@/storage-file/entities/storage-file.entity';
+//import { PropertyFeature } from './property-feature.entity';
 
 @Entity('properties')
 export class Property extends BaseEntity {
@@ -40,13 +41,13 @@ export class Property extends BaseEntity {
   @Column({ nullable: false, type: 'tinyint' })
   noOfBathRoom: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   propertySize: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   yearBuild: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   totalFloors: number;
 
   @Column({ nullable: false, type: 'varchar' })
@@ -103,8 +104,19 @@ export class Property extends BaseEntity {
   @JoinColumn()
   city: City;
 
-  @ManyToMany(() => Feature, (feature) => feature.properties)
+  @ManyToMany(() => Feature, (feature) => feature.property)
   features: Feature[];
+
+  // @OneToMany(
+  //   () => PropertyFeature,
+  //   (propertyFeature) => propertyFeature.property,
+  //   {
+  //     cascade: true,
+  //     onDelete: 'CASCADE',
+  //     onUpdate: 'CASCADE',
+  //   },
+  // )
+  // propertyFeatures: PropertyFeature[];
 
   //for property type === 'house' and purpose === 'sale' then floor plan value will be applied
   @OneToMany(() => FloorPlan, (floorPlan) => floorPlan.property)

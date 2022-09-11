@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { StorageFileService } from './storage-file.service';
 import { CreateStorageFileDto } from './dto/create-storage-file.dto';
 import { UpdateStorageFileDto } from './dto/update-storage-file.dto';
@@ -23,7 +31,10 @@ export class StorageFileController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStorageFileDto: UpdateStorageFileDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateStorageFileDto: UpdateStorageFileDto,
+  ) {
     return this.storageFileService.update(+id, updateStorageFileDto);
   }
 
