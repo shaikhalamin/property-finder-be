@@ -8,13 +8,17 @@ export class StorageFile extends BaseEntity {
   @Column({ nullable: false })
   name: string;
 
-  @Column({ nullable: false, type: 'varchar', length: 100 })
+  // type will be header or feature for image file now
+  @Column({ nullable: true, type: 'varchar', length: 50 })
   type: string;
+
+  @Column({ nullable: true, type: 'varchar', length: 20 })
+  size: string;
 
   @Column({ nullable: true })
   image_url: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'varchar', length: 200 })
   folder_path: string;
 
   @ManyToOne(() => Property, (property) => property.propertyImages)

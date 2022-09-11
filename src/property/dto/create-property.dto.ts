@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { CreateFloorPlanDto } from './floor-plan/create-floor-plan.dto';
 export class CreatePropertyDto {
   @IsNotEmpty()
@@ -83,9 +83,12 @@ export class CreatePropertyDto {
   @IsNotEmpty()
   city: number;
 
+  @IsOptional()
   @IsNotEmpty()
+  @IsNumber()
   features: number[];
 
+  @IsOptional()
   @IsNotEmpty()
   floorPlans: CreateFloorPlanDto[];
 
@@ -93,10 +96,7 @@ export class CreatePropertyDto {
   agent: number;
 
   @IsNotEmpty()
-  headerImage: string;
-
-  @IsNotEmpty()
-  propertyImages: string;
+  propertyImages: number[];
 
   @IsNotEmpty()
   deposit: number;

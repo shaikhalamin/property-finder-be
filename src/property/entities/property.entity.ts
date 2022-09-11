@@ -95,6 +95,10 @@ export class Property extends BaseEntity {
   @JoinColumn()
   propertyType: PropertyType;
 
+  @ManyToOne(() => Agent, (agent) => agent.properties)
+  @JoinColumn()
+  agent: Agent;
+
   @ManyToOne(() => City, (city) => city.properties)
   @JoinColumn()
   city: City;
@@ -102,20 +106,15 @@ export class Property extends BaseEntity {
   @ManyToMany(() => Feature, (feature) => feature.properties)
   features: Feature[];
 
+  //for property type === 'house' and purpose === 'sale' then floor plan value will be applied
   @OneToMany(() => FloorPlan, (floorPlan) => floorPlan.property)
   floorPlans: FloorPlan[];
-
-  @ManyToMany(() => Agent, (agent) => agent.properties)
-  @JoinColumn()
-  agent: Agent;
-
-  @Column({ nullable: true, type: 'varchar' })
-  headerImage: string;
 
   // by setting type [header and feature] we can get header and feature images of any property
   @OneToMany(() => StorageFile, (storageFile) => storageFile.property)
   propertyImages: StorageFile[];
 
+  // based on purpose(rent) the below data will be filled like for rent the below data will be filled
   @Column({ nullable: true, type: 'double' })
   deposit: number;
 
