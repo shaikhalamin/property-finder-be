@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePropertyTypeDto } from './dto/create-property-type.dto';
@@ -55,6 +55,7 @@ export class PropertyTypeService {
     const propertyTypeCount = await this.propertyTypeRepository.count({});
 
     if (!propertyTypeCount) {
+      Logger.log('Running property type seeder');
       await this.propertyTypeRepository.insert(propertyTypes);
     }
 

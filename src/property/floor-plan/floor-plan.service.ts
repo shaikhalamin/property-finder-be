@@ -1,11 +1,7 @@
-import { StorageFile } from '@/storage-file/entities/storage-file.entity';
-import {
-  BadGatewayException,
-  BadRequestException,
-  Injectable,
-} from '@nestjs/common';
+import { StorageFileService } from '@/storage-file/storage-file.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { FloorPlan } from '../entities/floor-plan.entity';
 import { CreateFloorPlanDto } from './dto/create-floor-plan.dto';
 import { UpdateFloorPlanDto } from './dto/update-floor-plan.dto';
@@ -15,17 +11,16 @@ export class FloorPlanService {
   constructor(
     @InjectRepository(FloorPlan)
     private readonly floorPlanRepository: Repository<FloorPlan>,
-    @InjectRepository(StorageFile)
-    private readonly storageFileRepository: Repository<StorageFile>,
+    private readonly storageFileService: StorageFileService,
   ) {}
 
   async create(createFloorPlanDto: CreateFloorPlanDto) {
     try {
       const { floorPlanImages, ...allFields } = createFloorPlanDto;
       const floorPlan = Object.assign(new FloorPlan(), allFields) as FloorPlan;
-      floorPlan.floorPlanImages = await this.storageFileRepository.findBy({
-        id: In([...floorPlanImages]),
-      });
+      floorPlan.floorPlanImages = await this.storageFileService.findByIds(
+        floorPlanImages,
+      );
 
       return await this.floorPlanRepository.save(floorPlan);
     } catch (error) {

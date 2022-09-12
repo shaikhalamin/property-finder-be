@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateFeatureDto } from '../dto/feature/create-feature.dto';
@@ -6,11 +11,14 @@ import { UpdateFeatureDto } from '../dto/feature/update-feature.dto';
 import { Feature } from '../entities/feature.entity';
 
 @Injectable()
-export class FeatureService {
+export class FeatureService implements OnApplicationBootstrap {
   constructor(
     @InjectRepository(Feature)
     private readonly featureRepository: Repository<Feature>,
   ) {}
+  async onApplicationBootstrap() {
+    await this.insertAll();
+  }
 
   async create(createFeatureDto: CreateFeatureDto) {
     try {
@@ -57,6 +65,7 @@ export class FeatureService {
 
     const featureCount = await this.featureRepository.count();
     if (!featureCount) {
+      Logger.log('Running feature seeder');
       await this.featureRepository.insert(featureArray);
     }
     return await this.featureRepository.find({});

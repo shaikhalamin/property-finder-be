@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCityDto } from './dto/create-city.dto';
@@ -62,6 +62,7 @@ export class CityService {
     const cityCount = await this.cityRepository.count({});
 
     if (!cityCount) {
+      Logger.log('Running city seeder');
       await this.cityRepository.insert(cityArray);
     }
 
