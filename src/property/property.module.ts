@@ -7,14 +7,14 @@ import { Feature } from './entities/feature.entity';
 import { FloorPlan } from './entities/floor-plan.entity';
 import { FeatureController } from './feature/feature.controller';
 import { FeatureService } from './feature/feature.service';
-//import { PropertyFeature } from './entities/property-feature.entity';
+import { PropertyFeature } from './entities/property-feature.entity';
 import { FloorPlanController } from './floor-plan/floor-plan.controller';
 import { FloorPlanService } from './floor-plan/floor-plan.service';
 import { StorageFileModule } from '@/storage-file/storage-file.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Property, Feature, FloorPlan]),
+    TypeOrmModule.forFeature([Property, Feature, FloorPlan, PropertyFeature]),
     StorageFileModule,
   ],
   controllers: [PropertyController, FeatureController, FloorPlanController],

@@ -4,6 +4,7 @@ import { In, Repository } from 'typeorm';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Feature } from './entities/feature.entity';
+import { PropertyFeature } from './entities/property-feature.entity';
 import { Property } from './entities/property.entity';
 
 @Injectable()
@@ -13,6 +14,8 @@ export class PropertyService {
     private readonly propertyRepository: Repository<Property>,
     @InjectRepository(Feature)
     private readonly featureRepository: Repository<Feature>,
+    @InjectRepository(PropertyFeature)
+    private readonly propertyFeatureRepository: Repository<PropertyFeature>,
   ) {}
 
   async create(createPropertyDto: CreatePropertyDto) {
@@ -25,18 +28,20 @@ export class PropertyService {
 
       const savedProperty = await this.propertyRepository.save(property);
 
-      this.savePropertyFeatures(features, savedProperty);
+      await this.setPropertyFeature(features, savedProperty);
 
       return await this.propertyRepository.find({
-        relations: ['features'],
+        relations: ['propertyFeatures.feature'],
       });
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
 
-  findAll() {
-    return `This action returns all property`;
+  async findAll() {
+    return await this.propertyRepository.find({
+      relations: ['propertyFeatures.feature'],
+    });
   }
 
   findOne(id: number) {
@@ -51,18 +56,13 @@ export class PropertyService {
     return `This action removes a #${id} property`;
   }
 
-  async savePropertyFeatures(features: number[], savedProperty: Property) {
-    try {
-      const featuresByIds = await this.featureRepository.findBy({
-        id: In([...features]),
+  async setPropertyFeature(features: number[], savedProperty: Property) {
+    for await (const featureId of features) {
+      const propertyFeatureInit = this.propertyFeatureRepository.create({
+        featureId: featureId,
+        propertyId: savedProperty.id,
       });
-
-      for await (const feature of featuresByIds) {
-        feature.property = [savedProperty];
-        await this.featureRepository.save(feature);
-      }
-    } catch (error) {
-      throw new BadRequestException(error.message);
+      await this.propertyFeatureRepository.save(propertyFeatureInit);
     }
   }
 }
