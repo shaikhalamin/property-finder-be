@@ -16,6 +16,7 @@ services:
     depends_on:
       - property_db
     environment:
+      TZ: Asia/Dhaka
       DB_URL: mysql://root:12345678@property_db_container:3306/property_me
       DB_DRIVER: mysql
 
@@ -25,6 +26,7 @@ services:
     image: mysql:5.7
     restart: always
     environment:
+      TZ: Asia/Dhaka
       MYSQL_DATABASE: property_me
       MYSQL_ROOT_PASSWORD: 12345678
     container_name: property_db_container

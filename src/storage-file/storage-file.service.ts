@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreateStorageFileDto } from './dto/create-storage-file.dto';
@@ -12,8 +12,17 @@ export class StorageFileService {
     private readonly storageFileRepository: Repository<StorageFile>,
   ) {}
 
-  create(createStorageFileDto: CreateStorageFileDto) {
-    return 'This action adds a new storageFile';
+  async create(createDto: CreateStorageFileDto, fileName: string) {
+    try {
+      const storageFile = this.storageFileRepository.create({
+        ...createDto,
+        fileName,
+      });
+      return await this.storageFileRepository.save(storageFile);
+    } catch (error) {
+      Logger.log(error);
+      throw new BadRequestException(error.message);
+    }
   }
 
   findAll() {
