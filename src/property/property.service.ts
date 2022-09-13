@@ -1,3 +1,4 @@
+import { StorageFileService } from '@/storage-file/storage-file.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
@@ -16,18 +17,30 @@ export class PropertyService {
     private readonly featureRepository: Repository<Feature>,
     @InjectRepository(PropertyFeature)
     private readonly propertyFeatureRepository: Repository<PropertyFeature>,
+    private readonly storageFileService: StorageFileService,
   ) {}
 
   async create(createPropertyDto: CreatePropertyDto) {
     try {
-      const { features, floorPlans, propertyImages, ...allFields } =
-        createPropertyDto;
+      const {
+        features,
+        propertyImages,
+        floorPlans,
+        rentCriteria,
+        ...allFields
+      } = createPropertyDto;
 
-      const property = Object.assign(new Property(), allFields) as Property;
+      let property = Object.assign(new Property(), allFields) as Property;
       property.slug = property.name.toLocaleLowerCase().split(' ').join('-');
+      property.propertyImages = await this.storageFileService.findByIds(
+        propertyImages,
+      );
+
+      if (property.purpose === 'RENT') {
+        property = Object.assign(property, { ...rentCriteria });
+      }
 
       const savedProperty = await this.propertyRepository.save(property);
-
       await this.setPropertyFeature(features, savedProperty);
 
       return await this.propertyRepository.find({

@@ -1,5 +1,12 @@
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { CreateFloorPlanDto } from '../floor-plan/dto/create-floor-plan.dto';
+import { RentCriteriaDto } from './rent-criteria.dto';
 export class CreatePropertyDto {
   @IsNotEmpty()
   name: string;
@@ -89,6 +96,8 @@ export class CreatePropertyDto {
   @IsNumber()
   features: number[];
 
+  @Type(() => CreateFloorPlanDto)
+  @ValidateNested({ each: true })
   @IsOptional()
   @IsNotEmpty()
   floorPlans: CreateFloorPlanDto[];
@@ -96,18 +105,9 @@ export class CreatePropertyDto {
   @IsNotEmpty()
   propertyImages: number[];
 
+  @Type(() => RentCriteriaDto)
+  @ValidateNested({ each: true })
+  @IsOptional()
   @IsNotEmpty()
-  deposit: number;
-
-  @IsNotEmpty()
-  petAllowed: boolean;
-
-  @IsNotEmpty()
-  paymentPeriod: string;
-
-  @IsNotEmpty()
-  habitable: string;
-
-  @IsNotEmpty()
-  minimumStayDuration: number;
+  rentCriteria: RentCriteriaDto;
 }

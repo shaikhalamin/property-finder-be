@@ -1,4 +1,4 @@
-export enum Purpose {
+export enum PropertyPurpose {
   RENT = 'Rent',
   SALE = 'Sale',
 }
