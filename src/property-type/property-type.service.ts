@@ -26,8 +26,35 @@ export class PropertyTypeService {
 
   async findAll() {
     return await this.propertyTypeRepository.find({
-      select: ['id', 'name'],
-      relations: ['properties'],
+      select: {
+        id: true,
+        name: true,
+        properties: {
+          id: true,
+          name: true,
+          noOfBathRoom: true,
+          propertyImages: {
+            id: true,
+            fileName: true,
+          },
+          propertyFeatures: {
+            feature: {
+              name: true,
+            },
+          },
+          floorPlans: {
+            name: true,
+            noOfBathRoom: true,
+            noOfBedRoom: true,
+          },
+        },
+      },
+      relations: [
+        'properties',
+        'properties.propertyImages',
+        'properties.propertyFeatures.feature',
+        'properties.floorPlans.floorPlanImages',
+      ],
     });
   }
 
