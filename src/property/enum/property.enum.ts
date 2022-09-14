@@ -1,6 +1,6 @@
 export enum PropertyPurpose {
-  RENT = 'Rent',
-  SALE = 'Sale',
+  RENT = 'RENT',
+  SALE = 'SALE',
 }
 
 export enum Accommodation {

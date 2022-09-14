@@ -11,13 +11,16 @@ export class FloorPlan extends BaseEntity {
   @Column({ nullable: false, type: 'text' })
   description: string;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false })
+  floorNo: number;
+
+  @Column({ nullable: false, type: 'int' })
   noOfBathRoom: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   propertySize: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   noOfBedRoom: number;
 
   @ManyToOne(() => Property, (property) => property.floorPlans)
