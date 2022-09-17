@@ -22,7 +22,7 @@ export class PropertyTypeController {
 
   @Get()
   findAll() {
-    return this.propertyTypeService.findAll();
+    return this.propertyTypeService.findPropertyCount();
   }
 
   @Get(':id')

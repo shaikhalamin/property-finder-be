@@ -58,6 +58,17 @@ export class PropertyTypeService {
     });
   }
 
+  async findPropertyCount() {
+    return await this.propertyTypeRepository
+      .createQueryBuilder('propertyType')
+      .select(['propertyType.id', 'propertyType.name', 'propertyType.alias'])
+      .loadRelationCountAndMap(
+        'propertyType.propertyCount',
+        'propertyType.properties',
+      )
+      .getMany();
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} propertyType`;
   }
