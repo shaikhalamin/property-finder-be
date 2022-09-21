@@ -83,11 +83,11 @@ export class PropertyTypeService {
 
   async insertAll() {
     const propertyTypes = [
-      { name: 'Townhouses' },
-      { name: 'Houses' },
-      { name: 'Garages' },
-      { name: 'Duplex' },
-      { name: 'Apartments' },
+      { name: 'Townhouses', alias: 'townhouses' },
+      { name: 'Houses', alias: 'houses' },
+      { name: 'Garages', alias: 'garages' },
+      { name: 'Duplex', alias: 'duplex' },
+      { name: 'Apartments', alias: 'apartments' },
     ];
 
     const propertyTypeCount = await this.propertyTypeRepository.count({});
