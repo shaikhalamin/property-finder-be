@@ -3,6 +3,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePropertyDto } from './dto/create-property.dto';
+import {
+  PropertyOrder,
+  QueryFilterPropertyDto,
+} from './dto/query-filter.property';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { PropertyFeature } from './entities/property-feature.entity';
 import { Property } from './entities/property.entity';
@@ -61,14 +65,53 @@ export class PropertyService {
     }
   }
 
-  async findAll() {
-    return await this.propertyRepository.find({
-      relations: [
-        'propertyImages',
-        'propertyFeatures.feature',
-        'floorPlans.floorPlanImages',
-      ],
-    });
+  async findAll(query: QueryFilterPropertyDto) {
+    try {
+      const {
+        page = 1,
+        perPage = 20,
+        order = PropertyOrder.DESC,
+        filters = {},
+      } = query;
+
+      const [results, total] = await this.propertyRepository.findAndCount({
+        join: {
+          alias: 'properties',
+          leftJoinAndSelect: {
+            propertyImages: 'properties.propertyImages',
+            propertyFeatures: 'properties.propertyFeatures',
+            feature: 'propertyFeatures.feature',
+            floorPlans: 'properties.floorPlans',
+          },
+        },
+        // where: (qb) => {
+        //   if (queryGenerator.is_valid) {
+        //     qb.where(
+        //       queryGenerator.filter_query,
+        //       queryGenerator.filter_query_object,
+        //     );
+        //   }
+        // },
+        take: Number(perPage),
+        skip: (Number(page) - 1) * Number(perPage),
+        order: {
+          created_at: order,
+        },
+      });
+
+      return {
+        success: true,
+        data: results,
+        meta: {
+          all_total: total,
+          total: results.length,
+          per_page: Number(perPage),
+          page: Number(page),
+        },
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   findOne(id: number) {
