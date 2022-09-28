@@ -1,23 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import { StorageFileService } from '@/storage-file/storage-file.service';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
+import { Agent } from './entities/agent.entity';
 
 @Injectable()
 export class AgentService {
-  create(createAgentDto: CreateAgentDto) {
-    return 'This action adds a new agent';
+  constructor(
+    @InjectRepository(Agent)
+    private readonly agentRepository: Repository<Agent>,
+    private readonly storageFileService: StorageFileService,
+  ) {}
+
+  async create(createAgentDto: CreateAgentDto) {
+    try {
+      const agent = Object.assign(new Agent(), createAgentDto) as Agent;
+      createAgentDto.agentImage &&
+        (agent.agentImage = await this.storageFileService.findOne(
+          createAgentDto.agentImage,
+        ));
+      return await this.agentRepository.save(agent);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all agent`;
+  async findAll() {
+    return await this.agentRepository.find({
+      relations: ['user', 'agentImage'],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} agent`;
+  async findOne(id: number) {
+    try {
+      return await this.agentRepository.findOneOrFail({
+        relations: ['user', 'properties', 'agentImage'],
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new NotFoundException('Agent not found');
+    }
   }
 
-  update(id: number, updateAgentDto: UpdateAgentDto) {
-    return `This action updates a #${id} agent`;
+  async update(id: number, updateAgentDto: UpdateAgentDto) {
+    try {
+      let agent = await this.findOne(id);
+      if (!agent) {
+        throw new NotFoundException('Agent not found !');
+      }
+      agent = Object.assign(agent, {
+        ...updateAgentDto,
+      });
+
+      updateAgentDto.agentImage &&
+        (agent.agentImage = await this.storageFileService.findOne(
+          updateAgentDto.agentImage,
+        ));
+
+      return this.agentRepository.save(agent);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   remove(id: number) {

@@ -29,8 +29,8 @@ export class StorageFileService {
     return `This action returns all storageFile`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} storageFile`;
+  async findOne(id: number) {
+    return await this.storageFileRepository.findOneBy({ id: id });
   }
 
   async findByIds(ids: number[]) {

@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import * as path from 'path';
 import { PropertyTypeService } from './property-type/property-type.service';
 import { CityService } from './city/city.service';
+import { UserService } from './user/user.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -19,8 +20,13 @@ async function bootstrap() {
   //run db seeder
   const propertyTypeService = app.get(PropertyTypeService);
   const cityService = app.get(CityService);
+  const userService = app.get(UserService);
 
-  await Promise.all([propertyTypeService.insertAll(), cityService.insertAll()]);
+  await Promise.all([
+    propertyTypeService.insertAll(),
+    cityService.insertAll(),
+    userService.insertAll(),
+  ]);
 
   await app.listen(3000, () => Logger.log(`Application started on port 3000`));
 }

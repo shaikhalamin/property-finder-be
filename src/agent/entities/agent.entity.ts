@@ -1,5 +1,6 @@
 import { BaseEntity } from '@/common/entity/base.entity';
 import { Property } from '@/property/entities/property.entity';
+import { StorageFile } from '@/storage-file/entities/storage-file.entity';
 import { User } from '@/user/entities/user.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
@@ -8,10 +9,7 @@ export class Agent extends BaseEntity {
   @Column({ nullable: true })
   designation: string;
 
-  @Column({ nullable: true })
-  phone: string;
-
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   description: string;
 
   @Column({ nullable: true })
@@ -32,4 +30,8 @@ export class Agent extends BaseEntity {
 
   @OneToMany(() => Property, (property) => property.agent)
   properties: Property[];
+
+  @OneToOne(() => StorageFile, (storageFile) => storageFile.floorPlan)
+  @JoinColumn()
+  agentImage: StorageFile;
 }

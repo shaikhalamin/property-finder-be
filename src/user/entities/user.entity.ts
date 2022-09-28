@@ -19,16 +19,19 @@ export class User extends BaseEntity {
   @Index('usersUniqueEmail', { unique: true })
   email: string;
 
+  @Column({ nullable: false, length: 100 })
+  phone: string;
+
   @Column({ nullable: false })
   password: string;
 
   @Column({ default: true })
-  is_active: boolean;
+  isActive: boolean;
 
   @Column({ default: false })
-  is_verified: boolean;
+  isVerified: boolean;
 
-  @Column({ nullable: false, length: 100 })
+  @Column({ nullable: true, default: 'user' })
   role: string;
 
   @OneToOne(() => Agent, (agent) => agent.user)
