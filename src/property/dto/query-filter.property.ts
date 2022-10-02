@@ -8,39 +8,35 @@ export enum PropertyOrder {
   NEGONE = -1,
 }
 
-// @Exclude()
-// export class Filters {
-//     @Expose()
-//     @IsOptional()
-//     @IsNotEmpty()
-//     @Transform(({ value }) => Number(value))
-//     jobLocation?: number;
+export class Filters {
+  @IsOptional()
+  @IsNotEmpty()
+  propertyType?: string;
 
-//     @Expose()
-//     @IsOptional()
-//     @IsNotEmpty()
-//     @Transform(({ value }) => Number(value))
-//     jobIndustry?: number;
+  @IsOptional()
+  @IsNotEmpty()
+  propertyFeatures?: string;
 
-//     @Expose()
-//     @IsOptional()
-//     @IsNotEmpty()
-//     @Transform(({ value }) => Number(value))
-//     company?: number;
+  @IsOptional()
+  @IsNotEmpty()
+  @Transform(({ value }) => String(value).toUpperCase())
+  purpose?: string;
 
-//     @Expose()
-//     @IsOptional()
-//     @IsNotEmpty()
-//     @Transform(({ value }) => Number(value))
-//     employmentType?: number;
+  @IsOptional()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  cityId?: number;
 
-//     @Expose()
-//     @IsOptional()
-//     @IsNotEmpty()
-//     @Transform(({ value }) => Number(value))
-//     jobLevel?: number;
+  @IsOptional()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  price?: number;
 
-// }
+  @IsOptional()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  noOfBedRoom?: number;
+}
 
 @Exclude()
 export class QueryFilterPropertyDto {
@@ -68,5 +64,5 @@ export class QueryFilterPropertyDto {
 
   @IsOptional()
   @IsNotEmpty()
-  filters: any;
+  filters: Filters;
 }

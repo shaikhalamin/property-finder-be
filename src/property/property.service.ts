@@ -1,9 +1,10 @@
 import { StorageFileService } from '@/storage-file/storage-file.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, In, LessThanOrEqual, Repository } from 'typeorm';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import {
+  Filters,
   PropertyOrder,
   QueryFilterPropertyDto,
 } from './dto/query-filter.property';
@@ -74,24 +75,19 @@ export class PropertyService {
         filters = {},
       } = query;
 
+      const queryFilters = this.customFilter(filters);
+
       const [results, total] = await this.propertyRepository.findAndCount({
-        join: {
-          alias: 'properties',
-          leftJoinAndSelect: {
-            propertyImages: 'properties.propertyImages',
-            propertyFeatures: 'properties.propertyFeatures',
-            feature: 'propertyFeatures.feature',
-            floorPlans: 'properties.floorPlans',
-          },
+        relations: [
+          'propertyType',
+          'city',
+          'propertyImages',
+          'propertyFeatures.feature',
+          'floorPlans',
+        ],
+        where: {
+          ...queryFilters,
         },
-        // where: (qb) => {
-        //   if (queryGenerator.is_valid) {
-        //     qb.where(
-        //       queryGenerator.filter_query,
-        //       queryGenerator.filter_query_object,
-        //     );
-        //   }
-        // },
         take: Number(perPage),
         skip: (Number(page) - 1) * Number(perPage),
         order: {
@@ -134,5 +130,66 @@ export class PropertyService {
       });
       await this.propertyFeatureRepository.save(propertyFeatureInit);
     }
+  }
+
+  removeFalsy(filters: Filters) {
+    return Object.entries(filters).reduce(
+      (a, [k, v]) => (v ? ((a[k] = v), a) : a),
+      {} as Filters,
+    );
+  }
+
+  customFilter(
+    filters: Filters,
+  ): FindOptionsWhere<Property>[] | FindOptionsWhere<Property> {
+    const removeFalsy = this.removeFalsy(filters);
+
+    let newFilters: FindOptionsWhere<Property>[] | FindOptionsWhere<Property> =
+      {};
+
+    if (Object.keys(removeFalsy).length > 0) {
+      removeFalsy.purpose &&
+        (newFilters = { ...newFilters, purpose: removeFalsy.purpose });
+
+      removeFalsy.noOfBedRoom &&
+        (newFilters = {
+          ...newFilters,
+          noOfBedRoom: removeFalsy.noOfBedRoom,
+        });
+
+      removeFalsy.price &&
+        (newFilters = {
+          ...newFilters,
+          price: LessThanOrEqual(removeFalsy.price),
+        });
+
+      removeFalsy.propertyType &&
+        (newFilters = {
+          ...newFilters,
+          propertyType: {
+            alias: removeFalsy.propertyType,
+          },
+        });
+
+      removeFalsy.cityId &&
+        (newFilters = {
+          ...newFilters,
+          city: {
+            id: removeFalsy.cityId,
+          },
+        });
+
+      removeFalsy.propertyFeatures &&
+        (newFilters = {
+          ...newFilters,
+          propertyFeatures: {
+            featureId: In([
+              ...removeFalsy.propertyFeatures?.split(',').map(Number),
+            ]),
+          },
+        });
+    }
+
+    return newFilters;
   }
 }
