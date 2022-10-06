@@ -32,6 +32,11 @@ export class PropertyController {
     return this.propertyService.findOne(+id);
   }
 
+  @Get('/find-by/:slug')
+  findBySlug(@Param('slug') slug: string) {
+    return this.propertyService.findBySlug(slug);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

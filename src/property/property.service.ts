@@ -1,5 +1,10 @@
 import { StorageFileService } from '@/storage-file/storage-file.service';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, In, LessThanOrEqual, Repository } from 'typeorm';
 import { CreatePropertyDto } from './dto/create-property.dto';
@@ -70,7 +75,7 @@ export class PropertyService {
     try {
       const {
         page = 1,
-        perPage = 20,
+        perPage = 10,
         order = PropertyOrder.DESC,
         filters = {},
       } = query;
@@ -112,6 +117,39 @@ export class PropertyService {
 
   findOne(id: number) {
     return this.propertyRepository.findOneBy({ id: id });
+  }
+
+  async findBySlug(slug: string) {
+    try {
+      const property = await this.propertyRepository.findOne({
+        relations: [
+          'propertyType',
+          'city',
+          'propertyImages',
+          'propertyFeatures.feature',
+          'floorPlans',
+          'agent.user',
+          'agent.agentImage',
+        ],
+        where: {
+          slug: slug,
+        },
+      });
+
+      if (!property) {
+        return {
+          success: false,
+          data: null,
+        };
+      }
+
+      return {
+        success: true,
+        data: property,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   update(id: number, updatePropertyDto: UpdatePropertyDto) {

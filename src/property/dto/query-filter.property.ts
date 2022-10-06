@@ -49,12 +49,7 @@ export class QueryFilterPropertyDto {
   @Expose()
   @IsOptional()
   @IsNotEmpty()
-  @Transform(({ value }) => {
-    if (value > 500) {
-      return 500;
-    }
-    return Number(value == undefined || !value ? 20 : value);
-  })
+  @Transform(({ value }) => (value == undefined || !value ? 1 : Number(value)))
   perPage: number;
 
   @Expose()
