@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { AgentModule } from './agent/agent.module';
 import { DataSource } from 'typeorm';
 import { StorageFileModule } from './storage-file/storage-file.module';
+import { AuthModule } from './auth/auth.module';
 
 const driverType = 'mysql'; //'mysql';
 const dbUrl = process.env.DB_URL; // 'mysql://root:12345678@localhost:3378/nest_ejobs';
@@ -35,6 +36,7 @@ const dbUrl = process.env.DB_URL; // 'mysql://root:12345678@localhost:3378/nest_
     UserModule,
     AgentModule,
     StorageFileModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
