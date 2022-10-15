@@ -30,6 +30,24 @@ export class AuthService {
     };
   }
 
+  async refreshTokens(userId: string, refreshToken: string) {
+    return {
+      userId,
+      refreshToken,
+    };
+    // const user = await this.usersService.findById(userId);
+    // if (!user || !user.refreshToken)
+    //   throw new ForbiddenException('Access Denied');
+    // const refreshTokenMatches = await argon2.verify(
+    //   user.refreshToken,
+    //   refreshToken,
+    // );
+    // if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
+    // const tokens = await this.getTokens(user.id, user.username);
+    // await this.updateRefreshToken(user.id, tokens.refreshToken);
+    // return tokens;
+  }
+
   private async validateUser(
     username: string,
     password: string,
