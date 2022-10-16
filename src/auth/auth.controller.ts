@@ -1,3 +1,4 @@
+import { RequestUser } from '@/common/type/req-user';
 import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
@@ -15,7 +16,8 @@ export class AuthController {
   @Post('/refresh')
   @UseGuards(JwtRefreshAuthGuard)
   refresh(@Req() req: Request) {
-    console.log(req.user);
-    return this.authService.refreshTokens('sds', 'rere');
+    const userToken = req.user as RequestUser;
+
+    return this.authService.refreshTokens(userToken);
   }
 }

@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import * as ms from 'ms';
+import { RequestUser } from '@/common/type/req-user';
 
 @Injectable()
 export class AuthService {
@@ -26,14 +27,29 @@ export class AuthService {
       access_token: this.getAccessToken(payload),
       refresh_token: this.getRefreshToken(payload),
       user: user,
-      expires_at: Date.now() + ms('5m'),
+      expires_at: this.getTokenExpireAt(),
     };
   }
 
-  async refreshTokens(userId: string, refreshToken: string) {
+  async refreshTokens(user: RequestUser): Promise<{
+    access_token: string;
+    refresh_token: string;
+    user: User;
+    expires_at: number;
+  }> {
+    const userInfo = await this.userService.findOne(user.userId);
+    if (!userInfo) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    delete userInfo.password;
+    const payload = {
+      userId: user.userId,
+    };
     return {
-      userId,
-      refreshToken,
+      access_token: this.getAccessToken(payload),
+      refresh_token: this.getRefreshToken(payload),
+      user: userInfo,
+      expires_at: this.getTokenExpireAt(),
     };
     // const user = await this.usersService.findById(userId);
     // if (!user || !user.refreshToken)
@@ -69,7 +85,7 @@ export class AuthService {
   getAccessToken(payload: any) {
     return this.jwtService.sign(payload, {
       secret: 'accessTokenSecret',
-      expiresIn: '5m',
+      expiresIn: '1m',
     });
   }
 
@@ -78,5 +94,10 @@ export class AuthService {
       secret: 'refreshTokenSecret',
       expiresIn: '30d',
     });
+  }
+
+  getTokenExpireAt(): number {
+    const expireAt = Date.now() + ms('1m');
+    return expireAt;
   }
 }
