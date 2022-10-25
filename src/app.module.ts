@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PropertyTypeModule } from './property-type/property-type.module';
@@ -13,21 +12,15 @@ import { DataSource } from 'typeorm';
 import { StorageFileModule } from './storage-file/storage-file.module';
 import { AuthModule } from './auth/auth.module';
 
-const driverType = 'mysql'; //'mysql';
-const dbUrl = process.env.DB_URL; // 'mysql://root:12345678@localhost:3378/nest_ejobs';
+const dbUrl = process.env.DATABASE_URL; 
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: driverType,
+      type: 'postgres',
       url: dbUrl,
       entities: [`${__dirname}/**/entities/*.{ts,js}`],
-      synchronize: true,
-      namingStrategy: new SnakeNamingStrategy(),
-      charset: 'utf8mb4_unicode_ci',
-      extra: {
-        charset: 'utf8mb4_unicode_ci',
-      },
+      synchronize: true
     }),
     PropertyTypeModule,
     MailModule,

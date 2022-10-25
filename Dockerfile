@@ -1,15 +1,29 @@
-FROM node:lts
+FROM node:16-alpine as builder
 
-WORKDIR /usr/src/app
-     
-COPY package*.json yarn.lock ./
-RUN yarn cache clean
-RUN yarn install
+ENV NODE_ENV build
 
-COPY . .
+USER node
+WORKDIR /home/node
 
-EXPOSE 3000
+COPY package*.json ./
 
-# CMD [ -d "node_modules" ] && yarn run build
+COPY --chown=node:node . /home/node/
 
-RUN yarn run build
+RUN npm ci
+
+RUN npm run build \
+    && npm prune --production
+
+
+FROM node:16-alpine
+
+ENV NODE_ENV production
+
+USER node
+WORKDIR /home/node
+
+COPY --from=builder --chown=node:node /home/node/package*.json /home/node/
+COPY --from=builder --chown=node:node /home/node/node_modules/ /home/node/node_modules/
+COPY --from=builder --chown=node:node /home/node/dist/ /home/node/dist/
+
+CMD ["node", "dist/main.js"]

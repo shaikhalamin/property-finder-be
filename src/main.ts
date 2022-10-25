@@ -28,6 +28,6 @@ async function bootstrap() {
     userService.insertAll(),
   ]);
 
-  await app.listen(3000, () => Logger.log(`Application started on port 3000`));
+  await app.listen(8080, () => Logger.log(`Application started on port 8080`));
 }
 bootstrap();

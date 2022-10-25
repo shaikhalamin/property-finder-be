@@ -33,13 +33,13 @@ export class Property extends BaseEntity {
   @Column({ nullable: false, type: 'text' })
   address: string;
 
-  @Column({ nullable: false, type: 'double' })
+  @Column({ nullable: false, type: 'float' })
   price: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   noOfBedRoom: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   noOfBathRoom: number;
 
   @Column({ nullable: false, type: 'int' })
@@ -54,40 +54,40 @@ export class Property extends BaseEntity {
   @Column({ nullable: false, type: 'varchar' })
   accommodations: string;
 
-  @Column({ nullable: false, type: 'double' })
+  @Column({ nullable: false, type: 'float' })
   ceilingHeight: number;
 
-  @Column({ nullable: false, type: 'double' })
+  @Column({ nullable: false, type: 'float' })
   distanceFromCenter: number;
 
   @Column({ nullable: false, type: 'varchar' })
   parking: string;
 
-  @Column({ nullable: false, type: 'double' })
+  @Column({ nullable: false, type: 'float' })
   areaSize: number;
 
   @Column({ nullable: false, type: 'boolean' })
   garage: boolean;
 
-  @Column({ nullable: true, type: 'double' })
+  @Column({ nullable: true, type: 'float' })
   garageSize: number;
 
   @Column({ nullable: true, type: 'varchar' })
   additionalSpec: string;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   utilityCost: number;
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'int' })
   cableTvCost: number;
 
   @Column({ nullable: false, type: 'varchar' })
   electricityCost: string;
 
-  @Column({ nullable: true, type: 'double' })
+  @Column({ nullable: true, type: 'float' })
   lat: number;
 
-  @Column({ nullable: true, type: 'double' })
+  @Column({ nullable: true, type: 'float' })
   long: number;
 
   @Column({ nullable: true, type: 'varchar' })
@@ -128,7 +128,7 @@ export class Property extends BaseEntity {
   propertyImages: StorageFile[];
 
   // based on purpose(rent) the below data will be filled like for rent the below data will be filled
-  @Column({ nullable: true, type: 'double' })
+  @Column({ nullable: true, type: 'float' })
   deposit: number;
 
   @Column({ nullable: true, type: 'boolean' })
@@ -140,6 +140,6 @@ export class Property extends BaseEntity {
   @Column({ nullable: true, type: 'varchar', length: 100 })
   habitable: string;
 
-  @Column({ nullable: true, type: 'tinyint' })
+  @Column({ nullable: true, type: 'int' })
   minimumStayDuration: number;
 }
