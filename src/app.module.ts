@@ -12,12 +12,8 @@ import { DataSource } from 'typeorm';
 import { StorageFileModule } from './storage-file/storage-file.module';
 import { AuthModule } from './auth/auth.module';
 
-const dbUrl =
-  process.env.DATABASE_URL ||
-  'mysql://root:12345678@localhost:3306/property_finder';
-
-const dbDriver = process.env.NODE_ENV != 'production' ? 'mysql' : 'postgres';
-
+const dbDriver = process.env.DB_DRIVER == 'mysql' ? 'mysql' : 'postgres';
+const dbUrl = process.env.DATABASE_URL || process.env.DB_LOCAL_URL
 @Module({
   imports: [
     TypeOrmModule.forRoot({
