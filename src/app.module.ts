@@ -16,10 +16,12 @@ const dbUrl =
   process.env.DATABASE_URL ||
   'mysql://root:12345678@localhost:3306/property_finder';
 
+const dbDriver = process.env.NODE_ENV != 'production' ? 'mysql' : 'postgres';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: dbDriver,
       url: dbUrl,
       entities: [`${__dirname}/**/entities/*.{ts,js}`],
       synchronize: true,

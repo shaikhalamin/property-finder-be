@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, RequestMethod } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
@@ -15,8 +15,9 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  //app.setGlobalPrefix('v1');
-
+  app.setGlobalPrefix('v1', {
+    exclude: [{ path: '/', method: RequestMethod.GET }],
+  });
   //run db seeder
   const propertyTypeService = app.get(PropertyTypeService);
   const cityService = app.get(CityService);
@@ -28,6 +29,8 @@ async function bootstrap() {
     userService.insertAll(),
   ]);
 
-  await app.listen(8080, () => Logger.log(`Application started on port 8080`));
+  await app.listen(8080, '0.0.0.0', async () =>
+    Logger.log(`Application started on port ${await app.getUrl()}`),
+  );
 }
 bootstrap();
