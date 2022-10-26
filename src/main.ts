@@ -9,13 +9,13 @@ import { UserService } from './user/user.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.useStaticAssets(path.join(__dirname, '..', 'public'));
+  app.useStaticAssets(path.join(__dirname,'./public'));
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  app.setGlobalPrefix('v1');
+  //app.setGlobalPrefix('v1');
 
   //run db seeder
   const propertyTypeService = app.get(PropertyTypeService);

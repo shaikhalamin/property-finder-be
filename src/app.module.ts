@@ -12,7 +12,7 @@ import { DataSource } from 'typeorm';
 import { StorageFileModule } from './storage-file/storage-file.module';
 import { AuthModule } from './auth/auth.module';
 
-const dbUrl = process.env.DATABASE_URL; 
+const dbUrl = process.env.DATABASE_URL || 'mysql://root:12345678@localhost:3306/property_finder'; 
 
 @Module({
   imports: [
