@@ -7,9 +7,9 @@ WORKDIR /home/node
 
 COPY package*.json ./
 
-COPY --chown=node:node . /home/node/
-
 RUN npm ci
+
+COPY --chown=node:node . /home/node/
 
 RUN npm run build \
     && npm prune --production
