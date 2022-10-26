@@ -12,7 +12,9 @@ import { DataSource } from 'typeorm';
 import { StorageFileModule } from './storage-file/storage-file.module';
 import { AuthModule } from './auth/auth.module';
 
-const dbUrl = process.env.DATABASE_URL || 'mysql://root:12345678@localhost:3306/property_finder'; 
+const dbUrl =
+  process.env.DATABASE_URL ||
+  'mysql://root:12345678@localhost:3306/property_finder';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ const dbUrl = process.env.DATABASE_URL || 'mysql://root:12345678@localhost:3306/
       type: 'postgres',
       url: dbUrl,
       entities: [`${__dirname}/**/entities/*.{ts,js}`],
-      synchronize: true
+      synchronize: true,
     }),
     PropertyTypeModule,
     MailModule,
