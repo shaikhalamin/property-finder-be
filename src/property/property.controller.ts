@@ -7,19 +7,28 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { QueryFilterPropertyDto } from './dto/query-filter.property';
+import { JwtAuthGuard } from '@/auth/guard/jwt-auth.guard';
+import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
+import { CurrentUser } from '@/auth/decorator/loggedin-user';
 
 @Controller('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
   @Post()
-  create(@Body() createPropertyDto: CreatePropertyDto) {
-    return this.propertyService.create(createPropertyDto);
+  @UseGuards(JwtAuthGuard)
+  create(
+    @CurrentUser() user: ExpressRequestUser,
+    @Body() createPropertyDto: CreatePropertyDto,
+  ) {
+    return this.propertyService.create(createPropertyDto, user);
   }
 
   @Get()

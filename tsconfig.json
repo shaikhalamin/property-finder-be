@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/agent/*": ["src/agent/*"],
+      "@/auth/*": ["src/auth/*"],
       "@/city/*": ["src/city/*"],
       "@/common/*": ["src/common/*"],
       "@/user/*": ["src/user/*"],

@@ -5,12 +5,12 @@ services:
   property_me_be:
     build:
       context: .
-      dockerfile: Dockerfile
-    # command: npm run start:dev
+      dockerfile: ./Local_Dockerfile
+    command: npm run dev
     container_name: property_finder
-    # volumes:
-    #   - ./:/home/node
-    #   - /home/node/node_modules
+    volumes:
+      - ./:/home/node
+      - /home/node/node_modules
     ports:
       - '8080:8080'
     depends_on:

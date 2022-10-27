@@ -11,11 +11,13 @@ import { PropertyFeature } from './entities/property-feature.entity';
 import { FloorPlanController } from './floor-plan/floor-plan.controller';
 import { FloorPlanService } from './floor-plan/floor-plan.service';
 import { StorageFileModule } from '@/storage-file/storage-file.module';
+import { UserModule } from '@/user/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Property, Feature, FloorPlan, PropertyFeature]),
     StorageFileModule,
+    UserModule,
   ],
   controllers: [PropertyController, FeatureController, FloorPlanController],
   providers: [PropertyService, FeatureService, FloorPlanService],

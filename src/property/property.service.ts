@@ -1,4 +1,5 @@
 import { StorageFileService } from '@/storage-file/storage-file.service';
+import { UserService } from '@/user/user.service';
 import {
   BadRequestException,
   Injectable,
@@ -18,6 +19,7 @@ import { PropertyFeature } from './entities/property-feature.entity';
 import { Property } from './entities/property.entity';
 import { PropertyPurpose } from './enum/property.enum';
 import { FloorPlanService } from './floor-plan/floor-plan.service';
+import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
 
 @Injectable()
 export class PropertyService {
@@ -28,9 +30,10 @@ export class PropertyService {
     private readonly propertyFeatureRepository: Repository<PropertyFeature>,
     private readonly storageFileService: StorageFileService,
     private readonly floorPlanService: FloorPlanService,
+    private readonly userService: UserService,
   ) {}
 
-  async create(createPropertyDto: CreatePropertyDto) {
+  async create(createPropertyDto: CreatePropertyDto, user: ExpressRequestUser) {
     try {
       const {
         features,
@@ -43,7 +46,12 @@ export class PropertyService {
       let property = Object.assign(new Property(), allFields) as Property;
       property.slug = property.name.toLocaleLowerCase().split(' ').join('-');
 
-      propertyImages.length > 1 &&
+      const checkExists = await this.findBySlug(property.slug);
+      if (checkExists.success) {
+        throw new BadRequestException('Property already exists !');
+      }
+
+      propertyImages.length > 0 &&
         (property.propertyImages = await this.storageFileService.findByIds(
           propertyImages,
         ));
@@ -58,14 +66,19 @@ export class PropertyService {
         }
       }
 
+      const agentUser = await this.userService.findOne(user.id, 'agent');
+
+      if (!agentUser.agent) {
+        throw new BadRequestException('Please add agent information first');
+      }
+
+      property.agent = agentUser.agent;
       const savedProperty = await this.propertyRepository.save(property);
 
       features.length > 0 &&
         (await this.setPropertyFeature(features, savedProperty));
 
-      return await this.propertyRepository.find({
-        relations: ['propertyImages', 'propertyFeatures.feature', 'floorPlans'],
-      });
+      return await this.findBySlug(savedProperty.slug);
     } catch (error) {
       throw new BadRequestException(error.message);
     }

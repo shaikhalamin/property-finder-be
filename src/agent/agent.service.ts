@@ -1,4 +1,6 @@
+import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
 import { StorageFileService } from '@/storage-file/storage-file.service';
+import { UserService } from '@/user/user.service';
 import {
   BadRequestException,
   Injectable,
@@ -16,11 +18,17 @@ export class AgentService {
     @InjectRepository(Agent)
     private readonly agentRepository: Repository<Agent>,
     private readonly storageFileService: StorageFileService,
+    private readonly userService: UserService,
   ) {}
 
-  async create(createAgentDto: CreateAgentDto) {
+  async create(createAgentDto: CreateAgentDto, user: ExpressRequestUser) {
     try {
+      const agentUser = await this.userService.findOne(user.id, 'agent');
+      if (agentUser.agent) {
+        throw new BadRequestException('Agent info of this user already exists');
+      }
       const agent = Object.assign(new Agent(), createAgentDto) as Agent;
+      agent.user = agentUser;
       createAgentDto.agentImage &&
         (agent.agentImage = await this.storageFileService.findOne(
           createAgentDto.agentImage,

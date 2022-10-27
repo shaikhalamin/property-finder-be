@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Feature } from './feature.entity';
 import { FloorPlan } from './floor-plan.entity';
 import { Agent } from '@/agent/entities/agent.entity';
@@ -18,7 +11,7 @@ import { PropertyFeature } from './property-feature.entity';
 
 @Entity('properties')
 export class Property extends BaseEntity {
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   name: string;
 
   @Column({ nullable: false })

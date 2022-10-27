@@ -4,9 +4,10 @@ import { AgentController } from './agent.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Agent } from './entities/agent.entity';
 import { StorageFileModule } from '@/storage-file/storage-file.module';
+import { UserModule } from '@/user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Agent]), StorageFileModule],
+  imports: [TypeOrmModule.forFeature([Agent]), StorageFileModule, UserModule],
   controllers: [AgentController],
   providers: [AgentService],
 })

@@ -1,3 +1,6 @@
+import { CurrentUser } from '@/auth/decorator/loggedin-user';
+import { JwtAuthGuard } from '@/auth/guard/jwt-auth.guard';
+import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
 import {
   Controller,
   Get,
@@ -6,6 +9,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { AgentService } from './agent.service';
 import { CreateAgentDto } from './dto/create-agent.dto';
@@ -16,8 +21,12 @@ export class AgentController {
   constructor(private readonly agentService: AgentService) {}
 
   @Post()
-  create(@Body() createAgentDto: CreateAgentDto) {
-    return this.agentService.create(createAgentDto);
+  @UseGuards(JwtAuthGuard)
+  create(
+    @CurrentUser() user: ExpressRequestUser,
+    @Body() createAgentDto: CreateAgentDto,
+  ) {
+    return this.agentService.create(createAgentDto, user);
   }
 
   @Get()

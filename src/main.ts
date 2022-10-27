@@ -15,6 +15,9 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
+
+  app.enable('trust proxy');
+
   app.setGlobalPrefix('v1', {
     exclude: [{ path: '/', method: RequestMethod.GET }],
   });

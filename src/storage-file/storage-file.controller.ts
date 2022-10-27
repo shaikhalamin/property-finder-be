@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UsePipes,
   ValidationPipe,
+  Req,
 } from '@nestjs/common';
 import { StorageFileService } from './storage-file.service';
 import { CreateStorageFileDto } from './dto/create-storage-file.dto';
@@ -49,11 +50,12 @@ export class StorageFileController {
     }),
   )
   create(
+    @Req() request: Request,
     @Body() createStorageFileDto: CreateStorageFileDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log({ createStorageFileDto, file });
-    return this.storageFileService.create(createStorageFileDto, file.filename);
+    const host = `${request.protocol}://${request.headers.host}`
+    return this.storageFileService.create(createStorageFileDto, file, host);
   }
 
   @Get()
