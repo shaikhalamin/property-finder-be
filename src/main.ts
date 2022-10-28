@@ -32,8 +32,8 @@ async function bootstrap() {
     userService.insertAll(),
   ]);
 
-  await app.listen(8080, '0.0.0.0', async () =>
-    Logger.log(`Application started on port ${await app.getUrl()}`),
-  );
+  await app.listen(8080, '0.0.0.0', async () => {
+    return Logger.log(`Application started on port ${await app.getUrl()}`);
+  });
 }
 bootstrap();

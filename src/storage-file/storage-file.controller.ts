@@ -10,7 +10,6 @@ import {
   UploadedFile,
   UsePipes,
   ValidationPipe,
-  Req,
 } from '@nestjs/common';
 import { StorageFileService } from './storage-file.service';
 import { CreateStorageFileDto } from './dto/create-storage-file.dto';
@@ -32,13 +31,13 @@ export class StorageFileController {
     FileInterceptor('fileName', {
       storage: diskStorage({
         // destination: './public/uploads/floor_plan',
-        destination: (req: Request, file: Express.Multer.File, cb: any) => {
-          const destinationPath = `./public/uploads/${req.body.type}`;
-          if (!fs.existsSync(destinationPath)) {
-            fs.mkdirSync(destinationPath, { recursive: true });
-          }
-          cb(null, `${destinationPath}`);
-        },
+        // destination: (req: Request, file: Express.Multer.File, cb: any) => {
+        //   const destinationPath = `./public/uploads/${req.body.type}`;
+        //   if (!fs.existsSync(destinationPath)) {
+        //     fs.mkdirSync(destinationPath, { recursive: true });
+        //   }
+        //   cb(null, `${destinationPath}`);
+        // },
         filename: (req: Request, file: Express.Multer.File, cb: any) => {
           const randomName = uuidv4();
           const fileName = `${Date.now()}time${randomName
@@ -50,12 +49,10 @@ export class StorageFileController {
     }),
   )
   create(
-    @Req() request: Request,
     @Body() createStorageFileDto: CreateStorageFileDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const host = `${request.protocol}://${request.headers.host}`
-    return this.storageFileService.create(createStorageFileDto, file, host);
+    return this.storageFileService.create(createStorageFileDto, file);
   }
 
   @Get()

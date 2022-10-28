@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
 
@@ -15,12 +15,17 @@ services:
       - '8080:8080'
     depends_on:
       - property_db
+    env_file:
+      - .env
     environment:
-      TZ: Asia/Dhaka
-      DB_LOCAL_URL: mysql://root:12345678@property_db_container:3306/property_me
-      DB_DRIVER: mysql
+      - TZ=Asia/Dhaka
+      - DATABASE_URL=mysql://root:12345678@property_db_container:3306/property_me
+      - DB_DRIVER=mysql
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
 
-# mysql -h 0.0.0.0 -P 3390 -u root -D property_me -p'12345678' // to connect mysql from terminal
+  # mysql -h 0.0.0.0 -P 3390 -u root -D property_me -p'12345678' // to connect mysql from terminal
   property_db:
     # platform: linux/x86_64 // for mac m1 build
     image: mysql:5.7

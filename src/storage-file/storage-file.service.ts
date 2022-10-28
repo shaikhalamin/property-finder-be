@@ -1,12 +1,10 @@
-import { BadRequestException, Injectable, Logger, Req } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreateStorageFileDto } from './dto/create-storage-file.dto';
 import { UpdateStorageFileDto } from './dto/update-storage-file.dto';
 import { StorageFile } from './entities/storage-file.entity';
-import { Express } from 'express';
-import * as fs from 'fs';
-
+import { cloudinaryUpload } from '@/common/util/cloudniary';
 @Injectable()
 export class StorageFileService {
   constructor(
@@ -14,21 +12,15 @@ export class StorageFileService {
     private readonly storageFileRepository: Repository<StorageFile>,
   ) {}
 
-  async create(
-    createDto: CreateStorageFileDto,
-    file: Express.Multer.File,
-    host: string,
-  ) {
+  async create(createDto: CreateStorageFileDto, file: Express.Multer.File) {
     try {
       const storageFile = this.storageFileRepository.create({
         ...createDto,
         fileName: file.filename,
       });
 
-      const filePath = file.path.split('/');
-      filePath.shift();
-      const imageUrl = `${host}/${filePath.join('/')}`;
-      storageFile.image_url = imageUrl;
+      const fileUpload = await cloudinaryUpload(file.path, createDto.type);
+      storageFile.image_url = fileUpload.secure_url;
 
       return await this.storageFileRepository.save(storageFile);
     } catch (error) {

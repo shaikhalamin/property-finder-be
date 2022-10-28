@@ -13,7 +13,7 @@ import { StorageFileModule } from './storage-file/storage-file.module';
 import { AuthModule } from './auth/auth.module';
 
 const dbDriver = process.env.DB_DRIVER == 'mysql' ? 'mysql' : 'postgres';
-const dbUrl = process.env.DATABASE_URL || process.env.DB_LOCAL_URL
+const dbUrl = process.env.DATABASE_URL;
 @Module({
   imports: [
     TypeOrmModule.forRoot({
