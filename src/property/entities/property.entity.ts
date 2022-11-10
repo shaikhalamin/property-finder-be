@@ -17,7 +17,7 @@ export class Property extends BaseEntity {
   @Column({ nullable: false })
   slug: string;
 
-  @Column({ nullable: false, type: 'varchar', length: 50 })
+  @Column({ nullable: false, length: 50 })
   purpose: string;
 
   @Column({ nullable: false, type: 'text' })
@@ -44,7 +44,7 @@ export class Property extends BaseEntity {
   @Column({ nullable: false, type: 'int' })
   totalFloors: number;
 
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: false })
   accommodations: string;
 
   @Column({ nullable: false, type: 'float' })
@@ -53,8 +53,11 @@ export class Property extends BaseEntity {
   @Column({ nullable: false, type: 'float' })
   distanceFromCenter: number;
 
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: false })
   parking: string;
+
+  @Column({ nullable: false })
+  heating: string;
 
   @Column({ nullable: false, type: 'float' })
   areaSize: number;
@@ -65,7 +68,7 @@ export class Property extends BaseEntity {
   @Column({ nullable: true, type: 'float' })
   garageSize: number;
 
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ nullable: true })
   additionalSpec: string;
 
   @Column({ nullable: false, type: 'int' })
@@ -74,7 +77,7 @@ export class Property extends BaseEntity {
   @Column({ nullable: false, type: 'int' })
   cableTvCost: number;
 
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: false })
   electricityCost: string;
 
   @Column({ nullable: true, type: 'float' })
@@ -83,7 +86,7 @@ export class Property extends BaseEntity {
   @Column({ nullable: true, type: 'float' })
   long: number;
 
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ nullable: true })
   videoTourLink: string;
 
   @ManyToOne(() => PropertyType, (propertyType) => propertyType.properties)
@@ -127,10 +130,10 @@ export class Property extends BaseEntity {
   @Column({ nullable: true, type: 'boolean' })
   petAllowed: boolean;
 
-  @Column({ nullable: true, type: 'varchar', length: 100 })
+  @Column({ nullable: true })
   paymentPeriod: string;
 
-  @Column({ nullable: true, type: 'varchar', length: 100 })
+  @Column({ nullable: true })
   habitable: string;
 
   @Column({ nullable: true, type: 'int' })

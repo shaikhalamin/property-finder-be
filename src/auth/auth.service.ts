@@ -97,7 +97,7 @@ export class AuthService {
   }
 
   getTokenExpireAt(): number {
-    const expireAt = Date.now() + ms('1m');
+    const expireAt = Date.now() + ms('30m');
     return expireAt;
   }
 }
