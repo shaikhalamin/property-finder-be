@@ -17,9 +17,14 @@ export class StorageFile extends BaseEntity {
   size: string;
 
   @Column({ nullable: true })
+  public_id: string;
+
+  @Column({ nullable: true })
   image_url: string;
 
-  @ManyToOne(() => Property, (property) => property.propertyImages)
+  @ManyToOne(() => Property, (property) => property.propertyImages, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   property: Property;
 

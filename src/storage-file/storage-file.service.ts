@@ -4,7 +4,10 @@ import { In, Repository } from 'typeorm';
 import { CreateStorageFileDto } from './dto/create-storage-file.dto';
 import { UpdateStorageFileDto } from './dto/update-storage-file.dto';
 import { StorageFile } from './entities/storage-file.entity';
-import { cloudinaryUpload } from '@/common/util/cloudniary';
+import {
+  cloudinaryDeleteFile,
+  cloudinaryUpload,
+} from '@/common/util/cloudniary';
 @Injectable()
 export class StorageFileService {
   constructor(
@@ -21,6 +24,7 @@ export class StorageFileService {
 
       const fileUpload = await cloudinaryUpload(file.path, createDto.type);
       storageFile.image_url = fileUpload.secure_url;
+      storageFile.public_id = fileUpload.public_id;
 
       return await this.storageFileRepository.save(storageFile);
     } catch (error) {
@@ -51,7 +55,22 @@ export class StorageFileService {
     return `This action updates a #${id} storageFile`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} storageFile`;
+  async remove(id: number) {
+    try {
+      const imageFile = await this.findOne(id);
+      if (!imageFile) {
+        throw new BadRequestException('Image file not found !');
+      }
+      const deleteFile = await cloudinaryDeleteFile(imageFile.public_id);
+
+      await this.storageFileRepository.delete(imageFile.id);
+
+      return {
+        success: true,
+        message: 'Image file deleted successfully',
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

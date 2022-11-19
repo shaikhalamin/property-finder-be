@@ -8,7 +8,7 @@ import { CityModule } from './city/city.module';
 import { PropertyModule } from './property/property.module';
 import { UserModule } from './user/user.module';
 import { AgentModule } from './agent/agent.module';
-import { DataSource } from 'typeorm';
+// import { DataSource } from 'typeorm';
 import { StorageFileModule } from './storage-file/storage-file.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -35,5 +35,5 @@ const dbUrl = process.env.DATABASE_URL;
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) {}
+  // constructor(private dataSource: DataSource) {}
 }

@@ -67,7 +67,7 @@ export class UserService {
     try {
       let user = await this.findOne(id);
       if (!user) {
-        throw new NotFoundException('Agent not found !');
+        throw new NotFoundException('User not found !');
       }
       user = Object.assign(user, {
         ...updateUserDto,

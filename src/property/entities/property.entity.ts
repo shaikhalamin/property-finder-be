@@ -41,6 +41,9 @@ export class Property extends BaseEntity {
   @Column({ nullable: false, type: 'int' })
   yearBuild: number;
 
+  @Column({ nullable: true, type: 'date' })
+  publishedDate: string;
+
   @Column({ nullable: false, type: 'int' })
   totalFloors: number;
 
@@ -120,7 +123,9 @@ export class Property extends BaseEntity {
   floorPlans: FloorPlan[];
 
   // by setting type [header and feature] we can get header and feature images of any property
-  @OneToMany(() => StorageFile, (storageFile) => storageFile.property)
+  @OneToMany(() => StorageFile, (storageFile) => storageFile.property, {
+    cascade: true,
+  })
   propertyImages: StorageFile[];
 
   // based on purpose(rent) the below data will be filled like for rent the below data will be filled

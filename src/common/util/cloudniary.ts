@@ -19,3 +19,13 @@ export const cloudinaryUpload = async (
     throw new BadRequestException(error.message);
   }
 };
+
+export const cloudinaryDeleteFile = async (
+  public_id: string,
+): Promise<{ result: string }> => {
+  try {
+    return await cloudinary.uploader.destroy(public_id);
+  } catch (error) {
+    throw new BadRequestException(error.message);
+  }
+};

@@ -20,7 +20,6 @@ import { Property } from './entities/property.entity';
 import { PropertyPurpose } from './enum/property.enum';
 import { FloorPlanService } from './floor-plan/floor-plan.service';
 import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
-
 @Injectable()
 export class PropertyService {
   constructor(
@@ -60,10 +59,12 @@ export class PropertyService {
         (property = Object.assign(property, { ...rentCriteria }));
 
       if (floorPlans.length > 0) {
+        const floorPlanToSave = [];
         for await (const plan of floorPlans) {
           const newFloorPlan = await this.floorPlanService.create(plan);
-          property.floorPlans = [newFloorPlan];
+          floorPlanToSave.push(newFloorPlan);
         }
+        property.floorPlans = floorPlanToSave;
       }
 
       const agentUser = await this.userService.findOne(user.id, 'agent');
@@ -128,8 +129,52 @@ export class PropertyService {
     }
   }
 
-  findOne(id: number) {
-    return this.propertyRepository.findOneBy({ id: id });
+  async findOne(
+    id: number,
+    relations: string[] = [
+      'propertyType',
+      'city',
+      'propertyImages',
+      'propertyFeatures.feature',
+      'floorPlans',
+    ],
+  ) {
+    return await this.propertyRepository.findOne({
+      relations: relations,
+      where: { id: id },
+    });
+  }
+
+  async findOneWithRelation(
+    id: number,
+    relations: string[] = [
+      'propertyType',
+      'city',
+      'propertyImages',
+      'propertyFeatures.feature',
+      'floorPlans',
+    ],
+  ) {
+    try {
+      const property = await this.propertyRepository.findOne({
+        relations: relations,
+        where: { id: id },
+      });
+
+      if (!property) {
+        return {
+          success: false,
+          data: null,
+        };
+      }
+
+      return {
+        success: true,
+        data: property,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async findBySlug(slug: string) {
@@ -165,8 +210,64 @@ export class PropertyService {
     }
   }
 
-  update(id: number, updatePropertyDto: UpdatePropertyDto) {
-    return `This action updates a #${id} property`;
+  async update(id: number, updatePropertyDto: UpdatePropertyDto) {
+    try {
+      const result = await this.findOneWithRelation(id, [
+        'propertyType',
+        'city',
+        'propertyImages',
+        'propertyFeatures.feature',
+        'floorPlans',
+        'agent.user',
+        'agent.agentImage',
+      ]);
+      if (!result.success) {
+        throw new NotFoundException('Property not found !');
+      }
+
+      let property = result.data;
+
+      const {
+        features,
+        propertyImages = [],
+        floorPlans = [],
+        rentCriteria,
+        ...allFields
+      } = updatePropertyDto;
+
+      property = Object.assign(property, {
+        ...allFields,
+      });
+
+      // need to send all image id with existing one and new one
+      // need to delete previous one if not found with the update dto
+      if (propertyImages.length > 0) {
+        property.propertyImages = await this.storageFileService.findByIds(
+          propertyImages,
+        );
+      }
+
+      if (floorPlans.length > 0) {
+        const floorPlanToSave = [];
+        for await (const plan of floorPlans) {
+          const newFloorPlan = await this.floorPlanService.create(plan);
+          floorPlanToSave.push(newFloorPlan);
+        }
+        property.floorPlans = floorPlanToSave;
+      }
+
+      if (property.purpose === PropertyPurpose.RENT) {
+        property = Object.assign(property, { ...rentCriteria });
+      }
+
+      if (features.length > 0) {
+        await this.setPropertyFeature(features, property);
+      }
+
+      return this.propertyRepository.save(property);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   remove(id: number) {
@@ -243,4 +344,11 @@ export class PropertyService {
 
     return newFilters;
   }
+
+  // diffArray(existing: number[], incoming: number[]) {
+  //   const diff = (a: number[], b: number[]) => {
+  //     return a.filter((item) => b.indexOf(item) === -1);
+  //   };
+  //   return [...diff(existing, incoming), ...diff(incoming, existing)];
+  // }
 }
