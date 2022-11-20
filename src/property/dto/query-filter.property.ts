@@ -8,6 +8,16 @@ export enum PropertyOrder {
   NEGONE = -1,
 }
 
+export class OrderFilter {
+  @IsOptional()
+  @IsNotEmpty()
+  created_at: PropertyOrder;
+
+  @IsOptional()
+  @IsNotEmpty()
+  price: PropertyOrder;
+}
+
 export class Filters {
   @IsOptional()
   @IsNotEmpty()
@@ -24,8 +34,7 @@ export class Filters {
 
   @IsOptional()
   @IsNotEmpty()
-  @Transform(({ value }) => Number(value))
-  cityId?: number;
+  cityId?: number | string;
 
   @IsOptional()
   @IsNotEmpty()
@@ -55,8 +64,9 @@ export class QueryFilterPropertyDto {
   @Expose()
   @IsOptional()
   @IsNotEmpty()
-  order: PropertyOrder;
+  order: OrderFilter;
 
+  @Expose()
   @IsOptional()
   @IsNotEmpty()
   filters: Filters;

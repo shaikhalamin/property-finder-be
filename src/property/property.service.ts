@@ -87,13 +87,7 @@ export class PropertyService {
 
   async findAll(query: QueryFilterPropertyDto) {
     try {
-      const {
-        page = 1,
-        perPage = 10,
-        order = PropertyOrder.DESC,
-        filters = {},
-      } = query;
-
+      const { page = 1, perPage = 10, order = {}, filters = {} } = query;
       const queryFilters = this.customFilter(filters);
 
       const [results, total] = await this.propertyRepository.findAndCount({
@@ -109,9 +103,7 @@ export class PropertyService {
         },
         take: Number(perPage),
         skip: (Number(page) - 1) * Number(perPage),
-        order: {
-          created_at: order,
-        },
+        order: order,
       });
 
       return {
@@ -323,6 +315,10 @@ export class PropertyService {
   customFilter(
     filters: Filters,
   ): FindOptionsWhere<Property>[] | FindOptionsWhere<Property> {
+    filters.propertyType.toLocaleLowerCase() === 'properties'
+      ? (filters.propertyType = '')
+      : filters.propertyType;
+
     const removeFalsy = this.removeFalsy(filters);
 
     let newFilters: FindOptionsWhere<Property>[] | FindOptionsWhere<Property> =
@@ -356,7 +352,7 @@ export class PropertyService {
         (newFilters = {
           ...newFilters,
           city: {
-            id: removeFalsy.cityId,
+            id: Number(removeFalsy.cityId),
           },
         });
 
