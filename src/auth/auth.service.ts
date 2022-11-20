@@ -85,7 +85,7 @@ export class AuthService {
   getAccessToken(payload: any) {
     return this.jwtService.sign(payload, {
       secret: 'accessTokenSecret',
-      expiresIn: '30m',
+      expiresIn: '30d',
     });
   }
 
@@ -97,7 +97,7 @@ export class AuthService {
   }
 
   getTokenExpireAt(): number {
-    const expireAt = Date.now() + ms('30m');
+    const expireAt = Date.now() + ms('30d');
     return expireAt;
   }
 }

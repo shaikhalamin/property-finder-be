@@ -229,6 +229,7 @@ export class PropertyService {
 
       const {
         features,
+        itemToBeDeleted = [],
         propertyImages = [],
         floorPlans = [],
         rentCriteria,
@@ -242,9 +243,10 @@ export class PropertyService {
       // need to send all image id with existing one and new one
       // need to delete previous one if not found with the update dto
       if (propertyImages.length > 0) {
-        property.propertyImages = await this.storageFileService.findByIds(
-          propertyImages,
-        );
+        property.propertyImages = [
+          ...property.propertyImages,
+          ...(await this.storageFileService.findByIds(propertyImages)),
+        ];
       }
 
       if (floorPlans.length > 0) {
@@ -260,11 +262,17 @@ export class PropertyService {
         property = Object.assign(property, { ...rentCriteria });
       }
 
+      const updatedProperty = await this.propertyRepository.save(property);
+
       if (features.length > 0) {
-        await this.setPropertyFeature(features, property);
+        await this.setPropertyFeature(features, updatedProperty);
       }
 
-      return this.propertyRepository.save(property);
+      if (itemToBeDeleted.length > 0) {
+        await this.removePropertyFeature(itemToBeDeleted, updatedProperty);
+      }
+
+      return await this.findBySlug(updatedProperty.slug);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -275,12 +283,33 @@ export class PropertyService {
   }
 
   async setPropertyFeature(features: number[], savedProperty: Property) {
-    for await (const featureId of features) {
-      const propertyFeatureInit = this.propertyFeatureRepository.create({
-        featureId: featureId,
-        propertyId: savedProperty.id,
-      });
-      await this.propertyFeatureRepository.save(propertyFeatureInit);
+    try {
+      for await (const featureId of features) {
+        const propertyFeatureInit = this.propertyFeatureRepository.create({
+          featureId: featureId,
+          propertyId: savedProperty.id,
+        });
+        await this.propertyFeatureRepository.save(propertyFeatureInit);
+      }
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async removePropertyFeature(features: number[], savedProperty: Property) {
+    try {
+      for await (const featureId of features) {
+        const propertyFeatureInit =
+          await this.propertyFeatureRepository.findOne({
+            where: {
+              featureId: featureId,
+              propertyId: savedProperty.id,
+            },
+          });
+        await this.propertyFeatureRepository.delete(propertyFeatureInit.id);
+      }
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
 

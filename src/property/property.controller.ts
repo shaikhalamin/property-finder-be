@@ -8,7 +8,6 @@ import {
   Delete,
   Query,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';

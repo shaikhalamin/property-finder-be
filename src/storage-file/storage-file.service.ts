@@ -17,14 +17,17 @@ export class StorageFileService {
 
   async create(createDto: CreateStorageFileDto, file: Express.Multer.File) {
     try {
+      const { secure_url, public_id } = await cloudinaryUpload(
+        file.path,
+        createDto.type,
+      );
+
       const storageFile = this.storageFileRepository.create({
         ...createDto,
         fileName: file.filename,
+        image_url: secure_url,
+        public_id,
       });
-
-      const fileUpload = await cloudinaryUpload(file.path, createDto.type);
-      storageFile.image_url = fileUpload.secure_url;
-      storageFile.public_id = fileUpload.public_id;
 
       return await this.storageFileRepository.save(storageFile);
     } catch (error) {
@@ -61,7 +64,7 @@ export class StorageFileService {
       if (!imageFile) {
         throw new BadRequestException('Image file not found !');
       }
-      const deleteFile = await cloudinaryDeleteFile(imageFile.public_id);
+      await cloudinaryDeleteFile(imageFile.public_id);
 
       await this.storageFileRepository.delete(imageFile.id);
 
