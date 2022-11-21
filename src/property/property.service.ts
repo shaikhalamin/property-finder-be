@@ -7,7 +7,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, In, LessThanOrEqual, Repository } from 'typeorm';
+import {
+  FindOptionsWhere,
+  In,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import {
   Filters,
@@ -315,7 +321,7 @@ export class PropertyService {
   customFilter(
     filters: Filters,
   ): FindOptionsWhere<Property>[] | FindOptionsWhere<Property> {
-    filters.propertyType.toLocaleLowerCase() === 'properties'
+    filters?.propertyType?.toLocaleLowerCase() === 'properties'
       ? (filters.propertyType = '')
       : filters.propertyType;
 
@@ -331,7 +337,7 @@ export class PropertyService {
       removeFalsy.noOfBedRoom &&
         (newFilters = {
           ...newFilters,
-          noOfBedRoom: removeFalsy.noOfBedRoom,
+          noOfBedRoom: MoreThanOrEqual(removeFalsy.noOfBedRoom),
         });
 
       removeFalsy.price &&
