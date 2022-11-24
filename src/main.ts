@@ -33,6 +33,8 @@ async function bootstrap() {
     userService.insertAll(),
   ]);
 
+  console.log('current node env', allowedHosts);
+
   await app.listen(8080, '0.0.0.0', async () => {
     return Logger.log(`Application started on port ${await app.getUrl()}`);
   });

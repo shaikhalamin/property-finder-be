@@ -95,6 +95,7 @@ export class PropertyService {
     try {
       const { page = 1, perPage = 10, order = {}, filters = {} } = query;
       const queryFilters = this.customFilter(filters);
+      console.log('filters', queryFilters);
 
       const [results, total] = await this.propertyRepository.findAndCount({
         relations: [
@@ -323,7 +324,7 @@ export class PropertyService {
   ): FindOptionsWhere<Property>[] | FindOptionsWhere<Property> {
     filters?.propertyType?.toLocaleLowerCase() === 'properties'
       ? (filters.propertyType = '')
-      : filters.propertyType;
+      : filters.propertyType.toLocaleLowerCase();
 
     const removeFalsy = this.removeFalsy(filters);
 
@@ -350,7 +351,7 @@ export class PropertyService {
         (newFilters = {
           ...newFilters,
           propertyType: {
-            alias: removeFalsy.propertyType,
+            alias: removeFalsy.propertyType.toLocaleLowerCase(),
           },
         });
 

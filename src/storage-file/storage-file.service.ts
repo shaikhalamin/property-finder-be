@@ -17,9 +17,13 @@ export class StorageFileService {
 
   async create(createDto: CreateStorageFileDto, file: Express.Multer.File) {
     try {
+      const folderPath =
+        process.env.NODE_ENV != 'production'
+          ? `${createDto.type}_local`
+          : createDto.type;
       const { secure_url, public_id } = await cloudinaryUpload(
         file.path,
-        createDto.type,
+        folderPath,
       );
 
       const storageFile = this.storageFileRepository.create({
