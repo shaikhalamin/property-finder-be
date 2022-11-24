@@ -32,6 +32,6 @@ export class StorageFile extends BaseEntity {
   @JoinColumn()
   floorPlan: FloorPlan;
 
-  @OneToOne(() => Agent, (agent) => agent.agentImage)
+  @OneToOne(() => Agent, (agent) => agent.agentImage, { onDelete: 'CASCADE' })
   agent: Agent;
 }

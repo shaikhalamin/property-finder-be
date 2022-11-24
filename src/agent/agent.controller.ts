@@ -26,7 +26,7 @@ export class AgentController {
     @CurrentUser() user: ExpressRequestUser,
     @Body() createAgentDto: CreateAgentDto,
   ) {
-    return this.agentService.create(createAgentDto, user);
+    return this.agentService.create(createAgentDto, user.id);
   }
 
   @Get()
@@ -40,6 +40,7 @@ export class AgentController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() updateAgentDto: UpdateAgentDto) {
     return this.agentService.update(+id, updateAgentDto);
   }

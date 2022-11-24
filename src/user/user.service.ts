@@ -20,7 +20,9 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     try {
       const user = Object.assign(new User(), createUserDto) as User;
-      return await this.userRepository.save(user);
+      const savedUser = await this.userRepository.save(user);
+      delete savedUser.password;
+      return savedUser;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -66,9 +68,6 @@ export class UserService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     try {
       let user = await this.findOne(id);
-      if (!user) {
-        throw new NotFoundException('User not found !');
-      }
       user = Object.assign(user, {
         ...updateUserDto,
       });

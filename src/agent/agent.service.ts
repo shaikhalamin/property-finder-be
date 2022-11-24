@@ -1,4 +1,3 @@
-import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
 import { StorageFileService } from '@/storage-file/storage-file.service';
 import { UserService } from '@/user/user.service';
 import {
@@ -21,9 +20,9 @@ export class AgentService {
     private readonly userService: UserService,
   ) {}
 
-  async create(createAgentDto: CreateAgentDto, user: ExpressRequestUser) {
+  async create(createAgentDto: CreateAgentDto, userId: number) {
     try {
-      const agentUser = await this.userService.findOne(user.id, 'agent');
+      const agentUser = await this.userService.findOne(userId, 'agent');
       if (agentUser.agent) {
         throw new BadRequestException('Agent info of this user already exists');
       }

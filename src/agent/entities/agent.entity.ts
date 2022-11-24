@@ -31,7 +31,10 @@ export class Agent extends BaseEntity {
   @OneToMany(() => Property, (property) => property.agent)
   properties: Property[];
 
-  @OneToOne(() => StorageFile, (storageFile) => storageFile.floorPlan)
+  @OneToOne(() => StorageFile, (storageFile) => storageFile.floorPlan, {
+    eager: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn()
   agentImage: StorageFile;
 }

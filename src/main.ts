@@ -9,12 +9,10 @@ import { UserService } from './user/user.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const allowedHosts = (process.env.CORS_ALLOWED_HOSTS as string) || '*';
   app.useStaticAssets(path.join(__dirname, './public'));
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'https://property-finder-teal.vercel.app',
-    ],
+    origin: allowedHosts.split(','),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

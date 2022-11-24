@@ -24,6 +24,7 @@ services:
       - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
       - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
       - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - CORS_ALLOWED_HOSTS=${CORS_ALLOWED_HOSTS}
 
   # mysql -h 0.0.0.0 -P 3390 -u root -D property_me -p'12345678' // to connect mysql from terminal
   property_db:

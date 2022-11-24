@@ -12,6 +12,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { UserResponseDto } from './dto/user.response.dto';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 @Controller('user')
 export class UserController {
@@ -24,13 +26,17 @@ export class UserController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.userService.findAll();
+  async findAll(): Promise<UserResponseDto[]> {
+    return plainToInstance(UserResponseDto, await this.userService.findAll());
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  async findOne(@Param('id') id: string): Promise<UserResponseDto> {
+    return plainToInstance(
+      UserResponseDto,
+      await this.userService.findOne(+id, 'agent.agentImage'),
+    );
   }
 
   @Patch(':id')
