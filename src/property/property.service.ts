@@ -324,7 +324,7 @@ export class PropertyService {
   ): FindOptionsWhere<Property>[] | FindOptionsWhere<Property> {
     filters?.propertyType?.toLocaleLowerCase() === 'properties'
       ? (filters.propertyType = '')
-      : filters.propertyType.toLocaleLowerCase();
+      : filters.propertyType;
 
     const removeFalsy = this.removeFalsy(filters);
 
@@ -351,7 +351,7 @@ export class PropertyService {
         (newFilters = {
           ...newFilters,
           propertyType: {
-            alias: removeFalsy.propertyType.toLocaleLowerCase(),
+            alias: removeFalsy.propertyType,
           },
         });
 
