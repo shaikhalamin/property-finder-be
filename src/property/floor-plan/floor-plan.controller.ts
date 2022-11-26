@@ -10,7 +10,9 @@ import {
 import { FloorPlanService } from './floor-plan.service';
 import { CreateFloorPlanDto } from './dto/create-floor-plan.dto';
 import { UpdateFloorPlanDto } from './dto/update-floor-plan.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Floor-plan')
 @Controller('floor-plan')
 export class FloorPlanController {
   constructor(private readonly floorPlanService: FloorPlanService) {}

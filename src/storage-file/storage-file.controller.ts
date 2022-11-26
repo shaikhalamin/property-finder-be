@@ -20,7 +20,9 @@ import { extname } from 'path';
 import { Express, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Storage File')
 @Controller('storage-file')
 export class StorageFileController {
   constructor(private readonly storageFileService: StorageFileService) {}

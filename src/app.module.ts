@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PropertyTypeModule } from './property-type/property-type.module';
-import { MailModule } from './common/mail/mail.module';
 import { CityModule } from './city/city.module';
 import { PropertyModule } from './property/property.module';
 import { UserModule } from './user/user.module';
@@ -23,7 +22,6 @@ const dbUrl = process.env.DATABASE_URL;
       synchronize: true,
     }),
     PropertyTypeModule,
-    MailModule,
     CityModule,
     PropertyModule,
     UserModule,

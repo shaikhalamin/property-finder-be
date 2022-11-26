@@ -16,7 +16,9 @@ import { QueryFilterPropertyDto } from './dto/query-filter.property';
 import { JwtAuthGuard } from '@/auth/guard/jwt-auth.guard';
 import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
 import { CurrentUser } from '@/auth/decorator/loggedin-user';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Property')
 @Controller('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}

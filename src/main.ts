@@ -6,6 +6,7 @@ import * as path from 'path';
 import { PropertyTypeService } from './property-type/property-type.service';
 import { CityService } from './city/city.service';
 import { UserService } from './user/user.service';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -33,7 +34,15 @@ async function bootstrap() {
     userService.insertAll(),
   ]);
 
-  console.log('current node env', allowedHosts);
+  const config = new DocumentBuilder()
+    .setTitle('Property Finder Backend')
+    .setDescription('Property Finder API description')
+    .setVersion('1.0')
+    .addTag('property_finder')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(8080, '0.0.0.0', async () => {
     return Logger.log(`Application started on port ${await app.getUrl()}`);

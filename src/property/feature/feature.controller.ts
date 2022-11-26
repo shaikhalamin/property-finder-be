@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateFeatureDto } from '../dto/feature/create-feature.dto';
 import { UpdateFeatureDto } from '../dto/feature/update-feature.dto';
 import { FeatureService } from './feature.service';
 
+@ApiTags('Feature')
 @Controller('feature')
 export class FeatureController {
   constructor(private readonly featureService: FeatureService) {}

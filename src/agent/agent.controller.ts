@@ -12,10 +12,12 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AgentService } from './agent.service';
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
 
+@ApiTags('Agent')
 @Controller('agent')
 export class AgentController {
   constructor(private readonly agentService: AgentService) {}
