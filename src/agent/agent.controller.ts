@@ -12,8 +12,10 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
 import { AgentService } from './agent.service';
+import { AgentResponseDto } from './dto/agent.response.dto';
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
 
@@ -36,9 +38,16 @@ export class AgentController {
     return this.agentService.findAll();
   }
 
+  @ApiResponse({
+    description: 'Agent info with properties',
+    type: AgentResponseDto,
+  })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.agentService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<AgentResponseDto> {
+    return plainToInstance(
+      AgentResponseDto,
+      await this.agentService.findOne(+id),
+    );
   }
 
   @Patch(':id')

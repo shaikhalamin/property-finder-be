@@ -47,7 +47,7 @@ export class AgentService {
   async findOne(id: number) {
     try {
       return await this.agentRepository.findOneOrFail({
-        relations: ['user', 'properties', 'agentImage'],
+        relations: ['user', 'properties.propertyImages', 'agentImage'],
         where: {
           id,
         },

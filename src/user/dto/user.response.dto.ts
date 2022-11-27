@@ -36,7 +36,9 @@ export class UserResponseDto {
   @Expose()
   role: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: () => AgentResponseDto,
+  })
   @Expose()
   agent?: AgentResponseDto;
 }
