@@ -38,9 +38,9 @@ export class UserService {
     }
   }
 
-  async findOne(id: number, relation?: string) {
+  async findOne(id: number, relation?: string): Promise<User> {
     try {
-      const user = await this.userRepository.findOne({
+      const user: User = await this.userRepository.findOne({
         relations: relation && relation.split(','),
         where: { id: id },
       });
@@ -71,7 +71,7 @@ export class UserService {
       user = Object.assign(user, {
         ...updateUserDto,
       });
-      return this.userRepository.save(user);
+      return await this.userRepository.update(id, user);
     } catch (error) {
       throw new BadRequestException(error.message);
     }

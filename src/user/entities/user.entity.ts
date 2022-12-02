@@ -1,4 +1,11 @@
-import { BeforeInsert, Column, Entity, Index, OneToOne } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  Index,
+  OneToOne,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { BaseEntity } from '@/common/entity/base.entity';
 import { Agent } from '@/agent/entities/agent.entity';
@@ -38,6 +45,7 @@ export class User extends BaseEntity {
   agent: Agent;
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPassword() {
     const salt = bcrypt.genSaltSync(10);
     this.password = bcrypt.hashSync(this.password, salt);

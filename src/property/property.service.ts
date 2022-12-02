@@ -333,7 +333,10 @@ export class PropertyService {
 
     if (Object.keys(removeFalsy).length > 0) {
       removeFalsy.purpose &&
-        (newFilters = { ...newFilters, purpose: removeFalsy.purpose });
+        (newFilters = {
+          ...newFilters,
+          purpose: String(removeFalsy.purpose).toUpperCase(),
+        });
 
       removeFalsy.noOfBedRoom &&
         (newFilters = {
