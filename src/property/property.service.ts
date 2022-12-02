@@ -94,7 +94,7 @@ export class PropertyService {
   async findAll(query: QueryFilterPropertyDto) {
     try {
       const { page = 1, perPage = 10, order = {}, filters = {} } = query;
-      const queryFilters = this.customFilter(filters);
+      const queryFilters = await this.customFilter(filters);
       console.log('filters', queryFilters);
 
       const [results, total] = await this.propertyRepository.findAndCount({
@@ -319,9 +319,9 @@ export class PropertyService {
     );
   }
 
-  customFilter(
+  async customFilter(
     filters: Filters,
-  ): FindOptionsWhere<Property>[] | FindOptionsWhere<Property> {
+  ): Promise<FindOptionsWhere<Property>[] | FindOptionsWhere<Property>> {
     filters?.propertyType?.toLocaleLowerCase() === 'properties'
       ? (filters.propertyType = '')
       : filters.propertyType;
@@ -366,6 +366,24 @@ export class PropertyService {
           },
         });
 
+      if (removeFalsy.userId) {
+        try {
+          const agentUser = await this.userService.findOne(
+            Number(removeFalsy.userId),
+            'agent',
+          );
+          newFilters = {
+            ...newFilters,
+            agent: {
+              id: Number(agentUser?.agent?.id),
+            },
+          };
+        } catch (error) {
+          newFilters = {
+            ...newFilters,
+          };
+        }
+      }
       removeFalsy.propertyFeatures &&
         (newFilters = {
           ...newFilters,

@@ -38,6 +38,10 @@ export class Filters {
 
   @IsOptional()
   @IsNotEmpty()
+  userId?: number | string;
+
+  @IsOptional()
+  @IsNotEmpty()
   @Transform(({ value }) => Number(value))
   price?: number;
 

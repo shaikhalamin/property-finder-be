@@ -5,7 +5,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { use } from 'passport';
 import { Repository } from 'typeorm';
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
@@ -36,6 +38,16 @@ export class AgentService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  @OnEvent('user.created')
+  async handleUserCreatedEvent(userId: number) {
+    console.log('handing user create event of id', userId);
+    const agent = new Agent();
+    agent.designation = 'Real Estate Agent';
+    const agentUser = await this.userService.findOne(userId);
+    agent.user = agentUser;
+    return await this.agentRepository.save(agent);
   }
 
   async findAll() {

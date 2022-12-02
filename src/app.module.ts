@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PropertyTypeModule } from './property-type/property-type.module';
@@ -21,6 +22,7 @@ const dbUrl = process.env.DATABASE_URL;
       entities: [`${__dirname}/**/entities/*.{ts,js}`],
       synchronize: true,
     }),
+    EventEmitterModule.forRoot(),
     PropertyTypeModule,
     CityModule,
     PropertyModule,

@@ -1,9 +1,11 @@
+import { passwordHash } from '@/common/util/db.utils';
 import {
   BadRequestException,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,6 +17,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -22,6 +25,7 @@ export class UserService {
       const user = Object.assign(new User(), createUserDto) as User;
       const savedUser = await this.userRepository.save(user);
       delete savedUser.password;
+      this.eventEmitter.emit('user.created', savedUser.id);
       return savedUser;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -71,6 +75,9 @@ export class UserService {
       user = Object.assign(user, {
         ...updateUserDto,
       });
+      if (updateUserDto?.password) {
+        user.password = passwordHash(updateUserDto.password);
+      }
       return await this.userRepository.update(id, user);
     } catch (error) {
       throw new BadRequestException(error.message);

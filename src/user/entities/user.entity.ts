@@ -1,14 +1,16 @@
 import {
   BeforeInsert,
-  BeforeUpdate,
   Column,
   Entity,
   Index,
+  OneToMany,
   OneToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { BaseEntity } from '@/common/entity/base.entity';
 import { Agent } from '@/agent/entities/agent.entity';
+import { UserRoles } from './user-roles.entity';
+import { passwordHash } from '@/common/util/db.utils';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -41,14 +43,17 @@ export class User extends BaseEntity {
   @Column({ nullable: true, default: 'user' })
   role: string;
 
+  @OneToMany(() => UserRoles, (userRoles) => userRoles.user, {
+    cascade: true,
+  })
+  userRoles: UserRoles[];
+
   @OneToOne(() => Agent, (agent) => agent.user)
   agent: Agent;
 
   @BeforeInsert()
-  @BeforeUpdate()
   async hashPassword() {
-    const salt = bcrypt.genSaltSync(10);
-    this.password = bcrypt.hashSync(this.password, salt);
+    this.password = passwordHash(this.password);
   }
 
   async validatePassword(password: string): Promise<boolean> {
