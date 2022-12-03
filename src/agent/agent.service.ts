@@ -61,7 +61,12 @@ export class AgentService {
       return await this.agentRepository.findOneOrFail({
         relations: ['user', 'properties.propertyImages', 'agentImage'],
         where: {
-          id,
+          id: id,
+        },
+        order: {
+          properties: {
+            updated_at: 'DESC',
+          },
         },
       });
     } catch (error) {
