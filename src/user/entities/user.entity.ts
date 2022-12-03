@@ -1,15 +1,8 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, OneToOne } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { BaseEntity } from '@/common/entity/base.entity';
 import { Agent } from '@/agent/entities/agent.entity';
-import { UserRoles } from './user-roles.entity';
+// import { UserRoles } from './user-roles.entity';
 import { passwordHash } from '@/common/util/db.utils';
 
 @Entity('users')
@@ -43,10 +36,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true, default: 'user' })
   role: string;
 
-  @OneToMany(() => UserRoles, (userRoles) => userRoles.user, {
-    cascade: true,
-  })
-  userRoles: UserRoles[];
+  // @OneToMany(() => UserRoles, (userRoles) => userRoles.user, {
+  //   cascade: true,
+  // })
+  // userRoles: UserRoles[];
 
   @OneToOne(() => Agent, (agent) => agent.user)
   agent: Agent;
