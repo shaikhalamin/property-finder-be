@@ -11,4 +11,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
   @IsNotEmpty()
   roles?: string[];
+
+  @IsOptional()
+  @IsNotEmpty()
+  isVerified: boolean;
 }

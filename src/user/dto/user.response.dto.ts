@@ -34,6 +34,10 @@ export class UserResponseDto {
 
   @ApiProperty()
   @Expose()
+  isVerified: boolean;
+
+  @ApiProperty()
+  @Expose()
   role: string;
 
   @ApiProperty({

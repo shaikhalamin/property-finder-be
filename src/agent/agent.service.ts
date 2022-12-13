@@ -53,6 +53,11 @@ export class AgentService {
   async findAll() {
     return await this.agentRepository.find({
       relations: ['user', 'agentImage'],
+      where: {
+        user: {
+          isVerified: true,
+        },
+      },
     });
   }
 
