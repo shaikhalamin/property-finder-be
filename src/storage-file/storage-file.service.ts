@@ -7,7 +7,7 @@ import { StorageFile } from './entities/storage-file.entity';
 import {
   cloudinaryDeleteFile,
   cloudinaryUpload,
-} from '@/common/util/cloudniary';
+} from '../common/util/cloudniary';
 @Injectable()
 export class StorageFileService {
   constructor(

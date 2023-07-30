@@ -1,4 +1,4 @@
-import { AgentResponseDto } from '@/agent/dto/agent.response.dto';
+import { AgentResponseDto } from '../../agent/dto/agent.response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 

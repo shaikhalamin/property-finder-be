@@ -1,6 +1,6 @@
-import { CurrentUser } from '@/auth/decorator/loggedin-user';
-import { JwtAuthGuard } from '@/auth/guard/jwt-auth.guard';
-import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
+import { CurrentUser } from '../auth/decorator/loggedin-user';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { ExpressRequestUser } from '../common/type/ExpressRequestUser';
 import {
   Controller,
   Get,
@@ -10,7 +10,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';

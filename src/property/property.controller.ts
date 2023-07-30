@@ -13,9 +13,9 @@ import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { QueryFilterPropertyDto } from './dto/query-filter.property';
-import { JwtAuthGuard } from '@/auth/guard/jwt-auth.guard';
-import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
-import { CurrentUser } from '@/auth/decorator/loggedin-user';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { ExpressRequestUser } from '../common/type/ExpressRequestUser';
+import { CurrentUser } from '../auth/decorator/loggedin-user';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Property')

@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from '@/common/entity/base.entity';
+import { BaseEntity } from '../../common/entity/base.entity';
 import { Property } from './property.entity';
-import { StorageFile } from '@/storage-file/entities/storage-file.entity';
+import { StorageFile } from '../../storage-file/entities/storage-file.entity';
 
 @Entity('floor_plans')
 export class FloorPlan extends BaseEntity {

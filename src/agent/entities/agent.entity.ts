@@ -1,7 +1,7 @@
-import { BaseEntity } from '@/common/entity/base.entity';
-import { Property } from '@/property/entities/property.entity';
-import { StorageFile } from '@/storage-file/entities/storage-file.entity';
-import { User } from '@/user/entities/user.entity';
+import { BaseEntity } from '../../common/entity/base.entity';
+import { Property } from '../../property/entities/property.entity';
+import { StorageFile } from '../../storage-file/entities/storage-file.entity';
+import { User } from '../../user/entities/user.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity('agents')

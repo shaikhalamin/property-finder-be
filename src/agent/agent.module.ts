@@ -3,8 +3,8 @@ import { AgentService } from './agent.service';
 import { AgentController } from './agent.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Agent } from './entities/agent.entity';
-import { StorageFileModule } from '@/storage-file/storage-file.module';
-import { UserModule } from '@/user/user.module';
+import { StorageFileModule } from '../storage-file/storage-file.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [

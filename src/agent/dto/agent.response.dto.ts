@@ -1,6 +1,6 @@
-import { PropertyResponseDto } from '@/property/dto/property.response.dto';
-import { StorageFileResponseDto } from '@/storage-file/dto/storagefile.response.dto';
-import { UserResponseDto } from '@/user/dto/user.response.dto';
+import { PropertyResponseDto } from '../../property/dto/property.response.dto';
+import { StorageFileResponseDto } from '../../storage-file/dto/storagefile.response.dto';
+import { UserResponseDto } from '../../user/dto/user.response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 

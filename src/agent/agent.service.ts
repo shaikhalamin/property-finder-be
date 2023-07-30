@@ -1,5 +1,5 @@
-import { StorageFileService } from '@/storage-file/storage-file.service';
-import { UserService } from '@/user/user.service';
+import { StorageFileService } from '../storage-file/storage-file.service';
+import { UserService } from '../user/user.service';
 import {
   BadRequestException,
   Injectable,
@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { use } from 'passport';
 import { Repository } from 'typeorm';
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
@@ -68,11 +67,11 @@ export class AgentService {
         where: {
           id: id,
         },
-        order: {
-          properties: {
-            updated_at: 'DESC',
-          },
-        },
+        // order: {
+        //   properties: {
+        //     updated_at: 'DESC',
+        //   },
+        // },
       });
     } catch (error) {
       throw new NotFoundException('Agent not found');

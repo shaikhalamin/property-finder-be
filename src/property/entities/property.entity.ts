@@ -8,11 +8,11 @@ import {
 } from 'typeorm';
 import { Feature } from './feature.entity';
 import { FloorPlan } from './floor-plan.entity';
-import { Agent } from '@/agent/entities/agent.entity';
-import { City } from '@/city/entities/city.entity';
-import { BaseEntity } from '@/common/entity/base.entity';
-import { PropertyType } from '@/property-type/entities/property-type.entity';
-import { StorageFile } from '@/storage-file/entities/storage-file.entity';
+import { Agent } from '../../agent/entities/agent.entity';
+import { City } from '../../city/entities/city.entity';
+import { BaseEntity } from '../../common/entity/base.entity';
+import { PropertyType } from '../../property-type/entities/property-type.entity';
+import { StorageFile } from '../../storage-file/entities/storage-file.entity';
 import { PropertyFeature } from './property-feature.entity';
 //import { PropertyFeature } from './property-feature.entity';
 

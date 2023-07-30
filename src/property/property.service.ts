@@ -1,5 +1,5 @@
-import { StorageFileService } from '@/storage-file/storage-file.service';
-import { UserService } from '@/user/user.service';
+import { StorageFileService } from '../storage-file/storage-file.service';
+import { UserService } from '../user/user.service';
 import {
   BadRequestException,
   Injectable,
@@ -25,7 +25,7 @@ import { PropertyFeature } from './entities/property-feature.entity';
 import { Property } from './entities/property.entity';
 import { PropertyPurpose } from './enum/property.enum';
 import { FloorPlanService } from './floor-plan/floor-plan.service';
-import { ExpressRequestUser } from '@/common/type/ExpressRequestUser';
+import { ExpressRequestUser } from '../common/type/ExpressRequestUser';
 @Injectable()
 export class PropertyService {
   constructor(

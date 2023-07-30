@@ -1,4 +1,4 @@
-import { passwordHash } from '@/common/util/db.utils';
+import { passwordHash } from '../common/util/db.utils';
 import {
   BadRequestException,
   Injectable,

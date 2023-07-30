@@ -1,4 +1,4 @@
-import { UserResponseDto } from '@/user/dto/user.response.dto';
+import { UserResponseDto } from '../../user/dto/user.response.dto';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 

@@ -10,8 +10,8 @@ import { FeatureService } from './feature/feature.service';
 import { PropertyFeature } from './entities/property-feature.entity';
 import { FloorPlanController } from './floor-plan/floor-plan.controller';
 import { FloorPlanService } from './floor-plan/floor-plan.service';
-import { StorageFileModule } from '@/storage-file/storage-file.module';
-import { UserModule } from '@/user/user.module';
+import { StorageFileModule } from '../storage-file/storage-file.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [

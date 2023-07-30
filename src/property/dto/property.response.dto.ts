@@ -1,4 +1,4 @@
-import { StorageFileResponseDto } from '@/storage-file/dto/storagefile.response.dto';
+import { StorageFileResponseDto } from '../../storage-file/dto/storagefile.response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 

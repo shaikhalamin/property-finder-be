@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { BaseEntity } from '@/common/entity/base.entity';
+import { BaseEntity } from '../../common/entity/base.entity';
 import { Property } from './property.entity';
 import { Feature } from './feature.entity';
 

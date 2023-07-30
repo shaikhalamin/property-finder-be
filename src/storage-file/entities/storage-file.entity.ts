@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { BaseEntity } from '@/common/entity/base.entity';
-import { Property } from '@/property/entities/property.entity';
-import { FloorPlan } from '@/property/entities/floor-plan.entity';
-import { Agent } from '@/agent/entities/agent.entity';
+import { BaseEntity } from '../../common/entity/base.entity';
+import { Property } from '../../property/entities/property.entity';
+import { FloorPlan } from '../../property/entities/floor-plan.entity';
+import { Agent } from '../../agent/entities/agent.entity';
 
 @Entity('storage_files')
 export class StorageFile extends BaseEntity {
