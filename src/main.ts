@@ -42,7 +42,14 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  //SwaggerModule.setup('api', app, document);
+
+  SwaggerModule.setup('api-docs', app, document, {
+    swaggerOptions: {
+      customJs:
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.0.0/swagger-ui-bundle.js',
+    },
+  });
 
   const PORT = process.env.PORT || 3000;
 
