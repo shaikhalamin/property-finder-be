@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Feature } from './feature.entity';
 import { FloorPlan } from './floor-plan.entity';
 import { Agent } from '@/agent/entities/agent.entity';
@@ -11,7 +18,8 @@ import { PropertyFeature } from './property-feature.entity';
 
 @Entity('properties')
 export class Property extends BaseEntity {
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false })
+  @Index('properties_unique_name', { unique: true })
   name: string;
 
   @Column({ nullable: false })
@@ -92,15 +100,21 @@ export class Property extends BaseEntity {
   @Column({ nullable: true })
   videoTourLink: string;
 
-  @ManyToOne(() => PropertyType, (propertyType) => propertyType.properties)
+  @ManyToOne(() => PropertyType, (propertyType) => propertyType.properties, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   propertyType: PropertyType;
 
-  @ManyToOne(() => Agent, (agent) => agent.properties)
+  @ManyToOne(() => Agent, (agent) => agent.properties, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   agent: Agent;
 
-  @ManyToOne(() => City, (city) => city.properties)
+  @ManyToOne(() => City, (city) => city.properties, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   city: City;
 
@@ -111,6 +125,7 @@ export class Property extends BaseEntity {
     () => PropertyFeature,
     (propertyFeature) => propertyFeature.property,
     {
+      createForeignKeyConstraints: false,
       cascade: true,
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
@@ -119,11 +134,14 @@ export class Property extends BaseEntity {
   propertyFeatures: PropertyFeature[];
 
   //for property type === 'house' and purpose === 'sale' then floor plan value will be applied
-  @OneToMany(() => FloorPlan, (floorPlan) => floorPlan.property)
+  @OneToMany(() => FloorPlan, (floorPlan) => floorPlan.property, {
+    createForeignKeyConstraints: false,
+  })
   floorPlans: FloorPlan[];
 
   // by setting type [header and feature] we can get header and feature images of any property
   @OneToMany(() => StorageFile, (storageFile) => storageFile.property, {
+    createForeignKeyConstraints: false,
     cascade: true,
   })
   propertyImages: StorageFile[];

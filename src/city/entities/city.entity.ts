@@ -10,6 +10,8 @@ export class City extends BaseEntity {
   @Column({ nullable: true })
   alias: string;
 
-  @OneToMany(() => Property, (property) => property.city)
+  @OneToMany(() => Property, (property) => property.city, {
+    createForeignKeyConstraints: false,
+  })
   properties: Property[];
 }

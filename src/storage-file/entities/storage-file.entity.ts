@@ -23,15 +23,21 @@ export class StorageFile extends BaseEntity {
   image_url: string;
 
   @ManyToOne(() => Property, (property) => property.propertyImages, {
+    createForeignKeyConstraints: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn()
   property: Property;
 
-  @ManyToOne(() => FloorPlan, (floorPlan) => floorPlan.floorPlanImages)
+  @ManyToOne(() => FloorPlan, (floorPlan) => floorPlan.floorPlanImages, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   floorPlan: FloorPlan;
 
-  @OneToOne(() => Agent, (agent) => agent.agentImage, { onDelete: 'CASCADE' })
+  @OneToOne(() => Agent, (agent) => agent.agentImage, {
+    createForeignKeyConstraints: false,
+    onDelete: 'CASCADE',
+  })
   agent: Agent;
 }

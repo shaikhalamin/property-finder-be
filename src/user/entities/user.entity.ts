@@ -14,11 +14,11 @@ export class User extends BaseEntity {
   lastName: string;
 
   @Column({ nullable: false, length: 100 })
-  @Index('usersUniqueName', { unique: true })
+  @Index('users_unique_name', { unique: true })
   username: string;
 
   @Column({ nullable: false, length: 255 })
-  @Index('usersUniqueEmail', { unique: true })
+  @Index('users_unique_email', { unique: true })
   email: string;
 
   @Column({ nullable: false, length: 100 })
@@ -41,7 +41,9 @@ export class User extends BaseEntity {
   // })
   // userRoles: UserRoles[];
 
-  @OneToOne(() => Agent, (agent) => agent.user)
+  @OneToOne(() => Agent, (agent) => agent.user, {
+    createForeignKeyConstraints: false,
+  })
   agent: Agent;
 
   @BeforeInsert()

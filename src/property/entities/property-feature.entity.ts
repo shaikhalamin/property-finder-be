@@ -11,11 +11,15 @@ export class PropertyFeature extends BaseEntity {
   @Column()
   featureId!: number;
 
-  @ManyToOne(() => Property, (property) => property.propertyFeatures)
+  @ManyToOne(() => Property, (property) => property.propertyFeatures, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   property: Property;
 
-  @ManyToOne(() => Feature, (feature) => feature.propertyFeatures)
+  @ManyToOne(() => Feature, (feature) => feature.propertyFeatures, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   feature: Feature;
 }

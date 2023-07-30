@@ -24,14 +24,19 @@ export class Agent extends BaseEntity {
   @Column({ nullable: true })
   linkedin_link: string;
 
-  @OneToOne(() => User, (user) => user.agent)
+  @OneToOne(() => User, (user) => user.agent, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   user: User;
 
-  @OneToMany(() => Property, (property) => property.agent)
+  @OneToMany(() => Property, (property) => property.agent, {
+    createForeignKeyConstraints: false,
+  })
   properties: Property[];
 
   @OneToOne(() => StorageFile, (storageFile) => storageFile.floorPlan, {
+    createForeignKeyConstraints: false,
     eager: true,
     onDelete: 'SET NULL',
   })

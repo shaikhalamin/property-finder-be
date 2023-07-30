@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PropertyTypeModule } from './property-type/property-type.module';
@@ -11,17 +13,43 @@ import { AgentModule } from './agent/agent.module';
 // import { DataSource } from 'typeorm';
 import { StorageFileModule } from './storage-file/storage-file.module';
 import { AuthModule } from './auth/auth.module';
+import { DataSourceOptions } from 'typeorm';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
-const dbDriver = process.env.DB_DRIVER == 'mysql' ? 'mysql' : 'postgres';
-const dbUrl = process.env.DATABASE_URL;
+export const getDatabaseConfig = (
+  configService: ConfigService,
+): DataSourceOptions => ({
+  type: 'mysql',
+  host: configService.get<string>('DATABASE_HOST'),
+  port: configService.get<number>('DATABASE_PORT'),
+  database: configService.get<string>('DATABASE_SCHEMA'),
+  username: configService.get<string>('DATABASE_USER'),
+  password: configService.get<string>('DATABASE_PASS'),
+  charset: 'utf8mb4_unicode_ci',
+  timezone: '+00:00',
+  ssl: {
+    ca: readFileSync(join(__dirname, '../cacert-2023-05-30.pem')),
+    rejectUnauthorized: false,
+  },
+  extra: {
+    charset: 'utf8mb4_unicode_ci',
+  },
+  synchronize: false,
+  entities: [`${__dirname}/**/entities/*.{ts,js}`],
+  namingStrategy: new SnakeNamingStrategy(),
+});
+
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: dbDriver,
-      url: dbUrl,
-      entities: [`${__dirname}/**/entities/*.{ts,js}`],
-      synchronize: true,
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        getDatabaseConfig(configService),
     }),
+
     EventEmitterModule.forRoot(),
     PropertyTypeModule,
     CityModule,

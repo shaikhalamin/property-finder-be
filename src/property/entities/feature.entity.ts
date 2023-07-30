@@ -16,6 +16,7 @@ export class Feature extends BaseEntity {
     () => PropertyFeature,
     (propertyFeature) => propertyFeature.feature,
     {
+      createForeignKeyConstraints: false,
       cascade: true,
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',

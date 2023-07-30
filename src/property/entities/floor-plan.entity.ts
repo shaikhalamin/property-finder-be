@@ -23,10 +23,14 @@ export class FloorPlan extends BaseEntity {
   @Column({ nullable: false, type: 'int' })
   noOfBedRoom: number;
 
-  @ManyToOne(() => Property, (property) => property.floorPlans)
+  @ManyToOne(() => Property, (property) => property.floorPlans, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   property: Property;
 
-  @OneToMany(() => StorageFile, (storageFile) => storageFile.floorPlan)
+  @OneToMany(() => StorageFile, (storageFile) => storageFile.floorPlan, {
+    createForeignKeyConstraints: false,
+  })
   floorPlanImages: StorageFile[];
 }
