@@ -61,7 +61,12 @@ export class PropertyTypeService {
   async findPropertyCount() {
     return await this.propertyTypeRepository
       .createQueryBuilder('propertyType')
-      .select(['propertyType.*'])
+      .select([
+        'propertyType.id',
+        'propertyType.name',
+        'propertyType.alias',
+        'propertyType.imageUrl',
+      ])
       .loadRelationCountAndMap(
         'propertyType.propertyCount',
         'propertyType.properties',
