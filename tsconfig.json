@@ -16,9 +16,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "esModuleInterop": true,
-    "skipDefaultLibCheck": true
+    "noFallthroughCasesInSwitch": false
     // "paths": {
     //   "@/agent/*": ["src/agent/*"],
     //   "@/auth/*": ["src/auth/*"],
