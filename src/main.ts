@@ -11,6 +11,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const allowedHosts = (process.env.CORS_ALLOWED_HOSTS as string) || '*';
+  console.log('Allowd host : ', allowedHosts);
+
   app.useStaticAssets(path.join(__dirname, './public'));
   app.enableCors({
     origin: allowedHosts.split(','),
