@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.useStaticAssets(path.join(__dirname, './public'));
   app.enableCors({
-    origin: allowedHosts.split(','),
+    origin: '*', //allowedHosts.split(','),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
