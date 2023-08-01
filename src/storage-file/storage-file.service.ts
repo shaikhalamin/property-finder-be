@@ -20,7 +20,7 @@ export class StorageFileService {
       const folderPath =
         process.env.NODE_ENV != 'production'
           ? `${createDto.type}_local`
-          : createDto.type;
+          : `property_finder_prod/${createDto.type}`;
       const { secure_url, public_id } = await cloudinaryUpload(
         file.path,
         folderPath,

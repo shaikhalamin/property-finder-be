@@ -10,6 +10,9 @@ export class PropertyType extends BaseEntity {
   @Column({ nullable: true })
   alias: string;
 
+  @Column({ nullable: true })
+  imageUrl: string;
+
   @OneToMany(() => Property, (property) => property.propertyType, {
     createForeignKeyConstraints: false,
   })
