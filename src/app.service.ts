@@ -17,7 +17,7 @@ export class AppService {
     ]);
     return {
       property,
-      frontend: frontend?.data?.status,
+      frontend: frontend?.status,
     };
   }
 
