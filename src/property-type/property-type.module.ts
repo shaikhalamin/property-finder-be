@@ -8,5 +8,6 @@ import { PropertyType } from './entities/property-type.entity';
   imports: [TypeOrmModule.forFeature([PropertyType])],
   controllers: [PropertyTypeController],
   providers: [PropertyTypeService],
+  exports: [PropertyTypeService],
 })
 export class PropertyTypeModule {}
