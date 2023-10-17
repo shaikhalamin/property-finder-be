@@ -35,7 +35,7 @@ export const getDatabaseConfig = (
   extra: {
     charset: 'utf8mb4_unicode_ci',
   },
-  synchronize: false,
+  synchronize: configService.get<string>('NODE_ENV') === 'development',
   entities: [`${__dirname}/**/entities/*.{ts,js}`],
   namingStrategy: new SnakeNamingStrategy(),
 });
