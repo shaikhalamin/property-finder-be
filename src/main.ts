@@ -10,6 +10,36 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.setGlobalPrefix('v1', {
+    exclude: [{ path: '/', method: RequestMethod.GET }],
+  });
+
+  const config = new DocumentBuilder()
+    .setTitle('Property Finder Backend')
+    .setDescription('Property Finder API description')
+    .setVersion('1.0')
+    .addTag('property_finder')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  //SwaggerModule.setup('swagger', app, document);
+
+  SwaggerModule.setup('swagger', app, document, {
+    swaggerOptions: {
+      customJs: [
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-es-bundle-core.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.min.js',
+      ],
+      customCssUrl: [
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.min.css',
+      ],
+    },
+  });
+
   const allowedHosts = (process.env.CORS_ALLOWED_HOSTS as string) || '*';
   console.log('Allowd host : ', allowedHosts);
 
@@ -22,9 +52,6 @@ async function bootstrap() {
 
   app.enable('trust proxy');
 
-  app.setGlobalPrefix('v1', {
-    exclude: [{ path: '/', method: RequestMethod.GET }],
-  });
   //run db seeder
   const propertyTypeService = app.get(PropertyTypeService);
   const cityService = app.get(CityService);
@@ -35,34 +62,6 @@ async function bootstrap() {
     cityService.insertAll(),
     userService.insertAll(),
   ]);
-
-  const config = new DocumentBuilder()
-    .setTitle('Property Finder Backend')
-    .setDescription('Property Finder API description')
-    .setVersion('1.0')
-    .addTag('property_finder')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
-
-  app.useStaticAssets(path.join(__dirname, '/static'), {
-    prefix: '/swagger',
-  });
-
-  // SwaggerModule.setup('api-docs', app, document, {
-  //   swaggerOptions: {
-  //     customJs: [
-  //       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
-  //     ],
-  //     customCssUrl: [
-  //       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
-  //     ],
-  //   },
-  // });
 
   const PORT = process.env.PORT || 3000;
 
