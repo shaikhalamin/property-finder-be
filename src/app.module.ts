@@ -17,24 +17,27 @@ import { DataSourceOptions } from 'typeorm';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+
 export const getDatabaseConfig = (
   configService: ConfigService,
 ): DataSourceOptions => ({
-  type: 'mysql',
-  host: configService.get<string>('DATABASE_HOST'),
-  port: configService.get<number>('DATABASE_PORT'),
-  database: configService.get<string>('DATABASE_SCHEMA'),
-  username: configService.get<string>('DATABASE_USER'),
-  password: configService.get<string>('DATABASE_PASS'),
-  charset: 'utf8mb4_unicode_ci',
-  timezone: '+00:00',
-  ssl: {
-    ca: readFileSync(join(__dirname, '../cacert-2023-05-30.pem')),
-    rejectUnauthorized: false,
-  },
-  extra: {
-    charset: 'utf8mb4_unicode_ci',
-  },
+  type: 'postgres',
+  url: configService.get<string>('DATABASE_URL'),
+  // type: 'mysql',
+  // host: configService.get<string>('DATABASE_HOST'),
+  // port: configService.get<number>('DATABASE_PORT'),
+  // database: configService.get<string>('DATABASE_SCHEMA'),
+  // username: configService.get<string>('DATABASE_USER'),
+  // password: configService.get<string>('DATABASE_PASS'),
+  // charset: 'utf8mb4_unicode_ci',
+  // timezone: '+00:00',
+  // ssl: {
+  //   // ca: readFileSync(join(__dirname, '../cacert-2023-05-30.pem')),
+  //   rejectUnauthorized: false,
+  // },
+  // extra: {
+  //   charset: 'utf8mb4_unicode_ci',
+  // },
   synchronize: configService.get<string>('NODE_ENV') === 'development',
   entities: [`${__dirname}/**/entities/*.{ts,js}`],
   namingStrategy: new SnakeNamingStrategy(),
