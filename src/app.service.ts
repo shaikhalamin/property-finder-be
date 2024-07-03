@@ -11,14 +11,24 @@ export class AppService {
   ) {}
 
   async getHello() {
-    const [property, frontend] = await Promise.all([
-      this.getProperty(),
-      this.callFrontend(),
-    ]);
-    return {
-      property,
-      frontend: frontend?.status,
-    };
+    try {
+      const [property, frontend] = await Promise.all([
+        this.getProperty(),
+        this.callFrontend(),
+      ]);
+      return {
+        backend:
+          property?.length > 0
+            ? 'Hello world from backend'
+            : 'Ajke amar mon valo nei',
+        frontend: frontend?.status,
+      };
+    } catch (error) {
+      return {
+        backend: 'Ajke amar mon valo nei',
+        frontend: 'Ajke amar mon valo nei',
+      };
+    }
   }
 
   async getProperty() {
